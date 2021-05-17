@@ -122,7 +122,6 @@ public class MapsActivity extends AppCompatActivity
             Restroom restroom = (Restroom) marker.getTag();
 
             Log.d("info", restroom.getName());
-            Log.d("info", restroom.getFilters().toString());
 
             LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
             View restroomPopup = inflater.inflate(R.layout.restroom_popup, null);
@@ -134,8 +133,17 @@ public class MapsActivity extends AppCompatActivity
 
             popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM,0,300 );
 
-            TextView name = restroomPopup.findViewById(R.id.popupNameTv);
-            name.setText(restroom.getName());
+            // set text for Popup window
+            TextView tvAddress = restroomPopup.findViewById(R.id.tvAddress);
+            TextView tvLocDistance = restroomPopup.findViewById(R.id.tvLocDistance);
+            TextView tvRatings = restroomPopup.findViewById(R.id.tvRatings);
+            TextView tvRateCount = restroomPopup.findViewById(R.id.tvRateCount);
+
+            tvAddress.setText(restroom.getName());
+            // TODO : how to calculate for this? -- tvLocDistance.setText();
+            tvRatings.setText(String.valueOf(restroom.getRating()));
+            // TODO : how to count users yada -- tvRateCount.setText();
+            // TODO : categ filters (recyclerview)
 
             return true;
         });

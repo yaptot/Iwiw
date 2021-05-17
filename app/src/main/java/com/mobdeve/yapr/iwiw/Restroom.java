@@ -5,28 +5,44 @@ import java.util.ArrayList;
 
 public class Restroom {
     private ArrayList<Double> coordinates;
-    private ArrayList<String> filters;
     private String name;
-    private boolean paid;
-    private int rating;
+    private double rating;
+
+    private String categ_disability;
+    private String categ_loc_type;
+    private String categ_paid;
+    private String categ_bidet;
+    private ArrayList<String> categ_toiletries;
 
     public ArrayList<Double> getCoordinates() {
         return coordinates;
-    }
-
-    public ArrayList<String> getFilters() {
-        return filters;
     }
 
     public String getName() {
         return name;
     }
 
-    public boolean isPaid() {
-        return paid;
+    public double getRating() {
+        return rating;
     }
 
-    public int getRating() {
-        return rating;
+    public String getCateg_disability() {
+        return categ_disability;
+    }
+
+    public String getCateg_loc_type() {
+        return categ_loc_type;
+    }
+
+    public String getCateg_paid() {
+        return categ_paid;
+    }
+
+    public String getCateg_bidet() {
+        return categ_bidet;
+    }
+
+    public ArrayList<String> getCateg_toiletries() {
+        return categ_toiletries;
     }
 }
