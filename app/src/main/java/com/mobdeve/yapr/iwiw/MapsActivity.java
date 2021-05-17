@@ -7,28 +7,49 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.RestrictionsManager;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.mobdeve.yapr.iwiw.databinding.ActivityMapsBinding;
 
-public class MapsActivity extends FragmentActivity
+import java.util.ArrayList;
+
+public class MapsActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMyLocationClickListener,
         GoogleMap.OnMyLocationButtonClickListener {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
-    private FirebaseFirestore db;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private ArrayList<Restroom> restrooms = new ArrayList<>();
 
     /**
      * Request code for location permission request.
@@ -47,6 +68,29 @@ public class MapsActivity extends FragmentActivity
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+        // Get all restrooms from Firestore
+        db.collection("restrooms").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            // When the query is complete
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                // If there are results
+                if(task.isSuccessful()) {
+                    // Add each restroom to the restrooms ArrayList
+                    for(QueryDocumentSnapshot document : task.getResult()) {
+                        restrooms.add(document.toObject(Restroom.class));
+                    }
+
+                    callMap(mapFragment);
+                } else
+                    Log.d("query", "NO RESTROOMS");
+            }
+        });
+
+
+    }
+
+    private void callMap(SupportMapFragment mapFragment) {
         mapFragment.getMapAsync(this);
     }
 
@@ -63,11 +107,50 @@ public class MapsActivity extends FragmentActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(14.549799230508313, 121.05598926544188);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in BGC"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        // Add a markers to the map
+        for(Restroom restroom : restrooms) {
+            LatLng point = new LatLng(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0));
+            mMap.addMarker(
+                    new MarkerOptions()
+                            .position(point)
+                            .title(restroom.getName())
+                            .icon(bitmapDescriptorFromVector(this, R.drawable.ic_marker))).setTag(restroom);
+        }
+
+        // Marker onClick Listener
+        mMap.setOnMarkerClickListener(marker -> {
+            Restroom restroom = (Restroom) marker.getTag();
+
+            Log.d("info", restroom.getName());
+            Log.d("info", restroom.getFilters().toString());
+
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            View restroomPopup = inflater.inflate(R.layout.restroom_popup, null);
+
+            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+
+            final PopupWindow popupWindow = new PopupWindow(restroomPopup, width, height);
+
+            popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM,0,300 );
+
+            TextView name = restroomPopup.findViewById(R.id.popupNameTv);
+            name.setText(restroom.getName());
+
+            return true;
+        });
+
         enableMyLocation();
+    }
+
+    // Convert vector to bitmap I guess
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     /**
