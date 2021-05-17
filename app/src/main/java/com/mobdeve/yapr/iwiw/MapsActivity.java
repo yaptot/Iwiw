@@ -16,6 +16,12 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -34,7 +40,7 @@ import com.mobdeve.yapr.iwiw.databinding.ActivityMapsBinding;
 
 import java.util.ArrayList;
 
-public class MapsActivity extends FragmentActivity
+public class MapsActivity extends AppCompatActivity
         implements OnMapReadyCallback,
         ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMyLocationClickListener,
         GoogleMap.OnMyLocationButtonClickListener {
@@ -76,11 +82,12 @@ public class MapsActivity extends FragmentActivity
                     }
 
                     callMap(mapFragment);
-
                 } else
                     Log.d("query", "NO RESTROOMS");
             }
         });
+
+
     }
 
     private void callMap(SupportMapFragment mapFragment) {
@@ -117,9 +124,21 @@ public class MapsActivity extends FragmentActivity
             Log.d("info", restroom.getName());
             Log.d("info", restroom.getFilters().toString());
 
+            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+            View restroomPopup = inflater.inflate(R.layout.restroom_popup, null);
+
+            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+
+            final PopupWindow popupWindow = new PopupWindow(restroomPopup, width, height);
+
+            popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM,0,300 );
+
+            TextView name = restroomPopup.findViewById(R.id.popupNameTv);
+            name.setText(restroom.getName());
+
             return true;
         });
-
 
         enableMyLocation();
     }
