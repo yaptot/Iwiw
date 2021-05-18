@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class ViewRestRmActivity extends AppCompatActivity {
     // TAG declarations
 
@@ -60,13 +62,86 @@ public class ViewRestRmActivity extends AppCompatActivity {
         String crAddr = gi.getStringExtra(MapsActivity.ADDRESS_TAG);
         String crDist = gi.getStringExtra(MapsActivity.DISTANCE_TAG);
         String crRating = gi.getStringExtra(MapsActivity.RATING_TAG);
-        String crRateCount = gi.getStringExtra(MapsActivity.RATE_COUNT_TAG);
 
-        // get filters
-//        gi.getStringExtra(MapsActivity.CATEG_LOCTYPE);
-//        gi.getStringExtra(MapsActivity.CATEG_PAID);
-//        gi.getStringExtra(MapsActivity.CATEG_DISABILITY);
-//        gi.getStringExtra(MapsActivity.CATEG_BIDET);
+        // TODO: Number of Ratings
+//        String crRateCount = gi.getStringExtra(MapsActivity.RATE_COUNT_TAG);
 
+        String crPaid = gi.getStringExtra(MapsActivity.CATEG_PAID);
+        String crDisability = gi.getStringExtra(MapsActivity.CATEG_DISABILITY);
+        String crBidet = gi.getStringExtra(MapsActivity.CATEG_BIDET);
+        String crLocType = gi.getStringExtra(MapsActivity.CATEG_LOCTYPE);
+        ArrayList<String> crToiletries = gi.getStringArrayListExtra(MapsActivity.CATEG_TOILETRIES);
+
+        tvAddress.setText(crAddr);
+        tvLocDistance.setText(crDist + " m");
+
+        setRating(crRating);
+        tvRatings.setText(crRating);
+        tvRateCount.setText("0");
+
+        if(crPaid.equalsIgnoreCase("Paid"))
+            imvPaid.setImageResource(R.drawable.ic_dollar_sign);
+        else
+            imvPaid.setImageResource(R.drawable.ic_dollar_sign_grey);
+
+        if(crDisability.equalsIgnoreCase("Disabled access"))
+            imvDisability.setImageResource(R.drawable.ic_disability);
+        else
+            imvDisability.setImageResource(R.drawable.ic_disability_grey);
+
+        if(crBidet.equalsIgnoreCase("Bidet"))
+            imvBidet.setImageResource(R.drawable.ic_bidet);
+        else
+            imvBidet.setImageResource(R.drawable.ic_bidet_grey);
+
+        tvLocType.setText(crLocType);
+
+        for(int i = 0; i < crToiletries.size(); i++) {
+            if(i == 0)
+                tvToiletries.setText(crToiletries.get(i));
+            else
+                tvToiletries.append(", " + crToiletries.get(i));
+        }
+
+    }
+
+    private void setRating(String crRating) {
+        double roundedRating = Math.round(Double.parseDouble(crRating));
+
+        if(roundedRating == 1) {
+            imvStar1.setImageResource(R.drawable.ic_icon_star);
+            imvStar2.setImageResource(R.drawable.ic_star_grey);
+            imvStar3.setImageResource(R.drawable.ic_star_grey);
+            imvStar4.setImageResource(R.drawable.ic_star_grey);
+            imvStar5.setImageResource(R.drawable.ic_star_grey);
+        }
+        else if(roundedRating == 2) {
+            imvStar1.setImageResource(R.drawable.ic_icon_star);
+            imvStar2.setImageResource(R.drawable.ic_icon_star);
+            imvStar3.setImageResource(R.drawable.ic_star_grey);
+            imvStar4.setImageResource(R.drawable.ic_star_grey);
+            imvStar5.setImageResource(R.drawable.ic_star_grey);
+        }
+        else if(roundedRating == 3) {
+            imvStar1.setImageResource(R.drawable.ic_icon_star);
+            imvStar2.setImageResource(R.drawable.ic_icon_star);
+            imvStar3.setImageResource(R.drawable.ic_icon_star);
+            imvStar4.setImageResource(R.drawable.ic_star_grey);
+            imvStar5.setImageResource(R.drawable.ic_star_grey);
+        }
+        else if(roundedRating == 4) {
+            imvStar1.setImageResource(R.drawable.ic_icon_star);
+            imvStar2.setImageResource(R.drawable.ic_icon_star);
+            imvStar3.setImageResource(R.drawable.ic_icon_star);
+            imvStar4.setImageResource(R.drawable.ic_icon_star);
+            imvStar5.setImageResource(R.drawable.ic_star_grey);
+        }
+        else if(roundedRating == 5) {
+            imvStar1.setImageResource(R.drawable.ic_icon_star);
+            imvStar2.setImageResource(R.drawable.ic_icon_star);
+            imvStar3.setImageResource(R.drawable.ic_icon_star);
+            imvStar4.setImageResource(R.drawable.ic_icon_star);
+            imvStar5.setImageResource(R.drawable.ic_icon_star);
+        }
     }
 }
