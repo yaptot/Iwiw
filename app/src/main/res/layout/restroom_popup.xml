@@ -14,7 +14,8 @@
         android:id="@+id/rv_filters"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:visibility="gone">
 
     </androidx.recyclerview.widget.RecyclerView>
 
