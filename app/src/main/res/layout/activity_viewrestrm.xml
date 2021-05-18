@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             app:srcCompat="@drawable/ic_icon_star" />
@@ -115,6 +115,26 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             app:srcCompat="@drawable/ic_star_grey" />
+
+        <TextView
+            android:id="@+id/view_tvRatings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="4.0"
+            android:textColor="#1D1D1D"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/view_tvRateCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="(3 ratings)" />
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -128,8 +148,8 @@
 
         <LinearLayout
             android:id="@+id/linearLayout4"
-            android:layout_width="180dp"
-            android:layout_height="150dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:layout_marginStart="15dp"
             android:background="#FFFFFF"
             android:orientation="vertical"
@@ -148,20 +168,21 @@
 
             <ImageView
                 android:id="@+id/view_imvPaid"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
                 app:srcCompat="@drawable/ic_dollar_sign" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout3"
-            android:layout_width="180dp"
-            android:layout_height="150dp"
-            android:layout_marginEnd="15dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:background="#FFFFFF"
             android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+            app:layout_constraintStart_toEndOf="@+id/linearLayout4"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
@@ -176,12 +197,45 @@
 
             <ImageView
                 android:id="@+id/view_imvDisability"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
                 app:srcCompat="@drawable/ic_disability" />
 
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginEnd="15dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/view_tvBidet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:text="Bidet access"
+                android:textAlignment="center"
+                android:textColor="#1D1D1D"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/view_imvBidet"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                app:srcCompat="@drawable/ic_bidet_grey" />
+        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
@@ -245,7 +299,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view_Toiletries">
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/view_tvToiletries"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
