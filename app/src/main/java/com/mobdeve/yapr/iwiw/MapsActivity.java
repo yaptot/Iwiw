@@ -142,8 +142,8 @@ public class MapsActivity extends AppCompatActivity
             tvAddress.setText(restroom.getName());
             // TODO : how to calculate for this? -- tvLocDistance.setText();
             tvRatings.setText(String.valueOf(restroom.getRating()));
-            // TODO : how to count users yada -- tvRateCount.setText();
-            // TODO : categ filters (recyclerview)
+            // TODO : how to count users? -- tvRateCount.setText();
+            // TODO : category filters (recyclerview)
 
             return true;
         });
