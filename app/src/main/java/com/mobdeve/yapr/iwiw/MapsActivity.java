@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.RestrictionsManager;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -44,6 +46,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 import com.mobdeve.yapr.iwiw.databinding.ActivityMapsBinding;
 
 import java.util.ArrayList;
@@ -53,6 +56,20 @@ public class MapsActivity extends AppCompatActivity
         ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMyLocationClickListener,
         GoogleMap.OnMyLocationButtonClickListener {
 
+    // TAG declarations
+    public static final String ADDRESS_TAG = "Restroom Address";
+    public static final String DISTANCE_TAG = "Location Distance";
+    public static final String RATING_TAG = "Average Ratings";
+    public static final String RATE_COUNT_TAG = "Users Rated";
+    public static final String CATEG_LOCTYPE = "Location Type";
+    public static final String CATEG_PAID = "Paid or Free";
+    public static final String CATEG_DISABILITY = "Disability access";
+    public static final String CATEG_BIDET = "Bidet access";
+
+    // component declarations
+    private ImageView imvNavArrow;
+
+    // var declarations
     private GoogleMap mMap; //Map
     private ActivityMapsBinding binding;
     private FirebaseFirestore db = FirebaseFirestore.getInstance(); // Database Instance
@@ -61,6 +78,12 @@ public class MapsActivity extends AppCompatActivity
 
     private ArrayList<Restroom> restrooms = new ArrayList<>(); // Restrooms available
     Location currentLocation; // Current Location
+    private Restroom closest;
+    private float dist;
+    private ArrayList<String> strToiletList;
+
+    // for object serialization (JSON)
+    Gson gson = new Gson();
 
     /**
      * Request code for location permission request.
@@ -81,7 +104,7 @@ public class MapsActivity extends AppCompatActivity
 
         getLastLoc();
 
-        // Instantiate Callback Function for lcoation updates
+        // Instantiate Callback Function for location updates
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -154,8 +177,8 @@ public class MapsActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        float dist = 0; // Stores the distance of the closest restroom to the user
-        Restroom closest = new Restroom(); // Stores the information of the closest restroom to the user
+        dist = 0; // Stores the distance of the closest restroom to the user
+        closest = new Restroom(); // Stores the information of the closest restroom to the user
 
 
         for (Restroom restroom : restrooms) {
@@ -197,9 +220,28 @@ public class MapsActivity extends AppCompatActivity
         tvAddress.setText(closest.getName());
         tvLocDistance.setText(String.valueOf(dist));
         tvRatings.setText(String.valueOf(closest.getRating()));
-        // TODO : how to count users yada -- tvRateCount.setText();
-        // TODO : categ filters (recyclerview)
+        // TODO : how to count users -- tvRateCount.setText();
+        // TODO : category filters (recyclerview)
 
+
+        // listener for navigate arrow btn in Popup window
+        this.imvNavArrow = findViewById(R.id.imvArrow);
+        imvNavArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <View Restroom Details activity>
+                Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
+
+                i.putExtra(MapsActivity.ADDRESS_TAG, closest.getName());
+                i.putExtra(MapsActivity.DISTANCE_TAG, String.valueOf(dist));
+                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(closest.getRating()));
+//                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
+                // putExtra() for filters
+
+                startActivity(i);
+
+            }
+        });
 
         // Marker onClick Listener
         mMap.setOnMarkerClickListener(marker -> {
@@ -207,12 +249,30 @@ public class MapsActivity extends AppCompatActivity
 
             Log.d("info", restroom.getName());
 
-            tvAddress.setText(restroom.getName());
-            float[] results = new float[1];
+            float[] results = new float[1]; // -- distance in (meters)
             Location.distanceBetween(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0), currentLocation.getLatitude(), currentLocation.getLongitude(), results);
 
+            tvAddress.setText(restroom.getName());
             tvLocDistance.setText(String.valueOf(results[0]));
             tvRatings.setText(String.valueOf(restroom.getRating()));
+
+            // listener for navigate arrow btn in Popup window (to handle updated clicked markers)
+            this.imvNavArrow = findViewById(R.id.imvArrow);
+            imvNavArrow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // navigate to <View Restroom Details activity>
+                    Intent i = new Intent();
+
+                    i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
+                    i.putExtra(MapsActivity.DISTANCE_TAG, String.valueOf(results[0]));
+                    i.putExtra(MapsActivity.RATING_TAG, String.valueOf(restroom.getRating()));
+//                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
+                    // putExtra() for filters
+
+                    startActivity(i);
+                }
+            });
 
             return true;
         });
