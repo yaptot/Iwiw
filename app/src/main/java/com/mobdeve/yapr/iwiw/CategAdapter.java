@@ -3,12 +3,16 @@ package com.mobdeve.yapr.iwiw;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
@@ -59,7 +63,31 @@ class CategAdapter extends RecyclerView.Adapter<CategAdapter.ViewHolder> {
         // Get data based on position
         String strCateg = categList.get(position);
 
-        // Set Order views based on the Order Row views and data
+
+        switch(position){
+            case 0: holder.tvCategory.setTextColor(Color.parseColor("#fd3a4a"));
+                holder.ll_CategTab.setBackground(ContextCompat.getDrawable(holder.ll_CategTab.getContext(), R.drawable.shape_categ_paid));
+                break;
+
+            case 1: holder.tvCategory.setTextColor(Color.parseColor("#49c6e5"));
+                holder.ll_CategTab.setBackground(ContextCompat.getDrawable(holder.ll_CategTab.getContext(), R.drawable.shape_categ_disability));
+                break;
+
+            case 2: holder.tvCategory.setTextColor(Color.parseColor("#f2c649"));
+                holder.ll_CategTab.setBackground(ContextCompat.getDrawable(holder.ll_CategTab.getContext(), R.drawable.shape_categ_bidet));
+                break;
+
+            case 3: holder.tvCategory.setTextColor(Color.parseColor("#66ddaa"));
+                holder.ll_CategTab.setBackground(ContextCompat.getDrawable(holder.ll_CategTab.getContext(), R.drawable.shape_categ_loc_type));
+                break;
+
+            default: holder.tvCategory.setTextColor(Color.parseColor("#d891ef"));
+                holder.ll_CategTab.setBackground(ContextCompat.getDrawable(holder.ll_CategTab.getContext(), R.drawable.shape_categ_toiletries));
+                break;
+        }
+
+
+        // Set category based on the Order Row views and data
         holder.tvCategory.setText(strCateg);
     }
 
