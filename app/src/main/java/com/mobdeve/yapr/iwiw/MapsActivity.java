@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
@@ -83,10 +85,11 @@ public class MapsActivity extends AppCompatActivity
     Location currentLocation; // Current Location
     private Restroom closest;
     private float dist;
-    private ArrayList<String> strToiletList;
 
-    // for object serialization (JSON)
-    Gson gson = new Gson();
+    // for RecyclerView component
+    private ArrayList<String> strCategList;
+    RecyclerView rvCategList;
+    private CategAdapter adapter;
 
     /**
      * Request code for location permission request.
@@ -216,7 +219,6 @@ public class MapsActivity extends AppCompatActivity
 
         final PopupWindow popupWindow = new PopupWindow(restroomPopup, width - 100, height);
 
-
         popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 300);
 
         // Get the components inside the popup window
@@ -229,8 +231,11 @@ public class MapsActivity extends AppCompatActivity
         tvLocDistance.setText(String.format("%.2f", dist) + " m");
         tvRatings.setText(String.valueOf(closest.getRating()));
         // TODO : how to count users -- tvRateCount.setText();
-        // TODO : category filters (recyclerview)
-
+        // setting Adapter to populate the data into RecyclerView -> binding them to each other
+        this.rvCategList = findViewById(R.id.rv_CategList);
+        adapter = new CategAdapter(closest.getCateg_toiletries(), this);
+        rvCategList.setAdapter(adapter);
+        rvCategList.setLayoutManager(new LinearLayoutManager(this));
 
         // listener for navigate arrow btn in Popup window
         this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
@@ -250,7 +255,6 @@ public class MapsActivity extends AppCompatActivity
                 i.putExtra(MapsActivity.CATEG_LOCTYPE, closest.getCateg_loc_type());
                 i.putExtra(MapsActivity.CATEG_TOILETRIES, closest.getCateg_toiletries());
 //                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
-                // putExtra() for filters
 
                 startActivity(i);
 
@@ -269,6 +273,12 @@ public class MapsActivity extends AppCompatActivity
             tvAddress.setText(restroom.getName());
             tvLocDistance.setText(String.format("%.2f", results[0]) + " m");
             tvRatings.setText(String.valueOf(restroom.getRating()));
+
+            // setting Adapter to populate the data into RecyclerView -> binding them to each other
+            this.rvCategList = findViewById(R.id.rv_CategList);
+            adapter = new CategAdapter(restroom.getCateg_toiletries(), this);
+            rvCategList.setAdapter(adapter);
+            rvCategList.setLayoutManager(new LinearLayoutManager(this));
 
             // listener for navigate arrow btn in Popup window (to handle updated clicked markers)
             this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
