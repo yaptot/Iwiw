@@ -14,7 +14,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="15dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/shape_details"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="15dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/shape_details"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_tvRateTitle">
@@ -151,7 +151,7 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_marginStart="15dp"
-            android:background="#FFFFFF"
+            android:background="@drawable/shape_details"
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -168,9 +168,10 @@
 
             <ImageView
                 android:id="@+id/view_imvPaid"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 app:srcCompat="@drawable/ic_dollar_sign" />
         </LinearLayout>
@@ -179,7 +180,7 @@
             android:id="@+id/linearLayout3"
             android:layout_width="110dp"
             android:layout_height="110dp"
-            android:background="#FFFFFF"
+            android:background="@drawable/shape_details"
             android:orientation="vertical"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout"
             app:layout_constraintStart_toEndOf="@+id/linearLayout4"
@@ -191,15 +192,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="10dp"
-                android:text="Disability access"
+                android:text="Disabled access"
                 android:textColor="#1D1D1D"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/view_imvDisability"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 app:srcCompat="@drawable/ic_disability" />
 
@@ -210,7 +213,7 @@
             android:layout_width="110dp"
             android:layout_height="110dp"
             android:layout_marginEnd="15dp"
-            android:background="#FFFFFF"
+            android:background="@drawable/shape_details"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -229,9 +232,10 @@
 
             <ImageView
                 android:id="@+id/view_imvBidet"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="10dp"
                 app:srcCompat="@drawable/ic_bidet_grey" />
         </LinearLayout>
@@ -257,7 +261,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="15dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/shape_details"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -271,7 +275,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="Mall"
-            android:textColor="#49C6E5" />
+            android:textColor="#49C6E5"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
@@ -292,7 +297,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="15dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/shape_details"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -306,7 +311,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:text="Tissue, Soap, Napkins"
-            android:textColor="#49C6E5" />
+            android:textColor="#49C6E5"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

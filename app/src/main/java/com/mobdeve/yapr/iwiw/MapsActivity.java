@@ -13,11 +13,13 @@ import android.content.RestrictionsManager;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -65,6 +67,7 @@ public class MapsActivity extends AppCompatActivity
     public static final String CATEG_PAID = "Paid or Free";
     public static final String CATEG_DISABILITY = "Disability access";
     public static final String CATEG_BIDET = "Bidet access";
+    public static final String CATEG_TOILETRIES = "Toiletries";
 
     // component declarations
     private ImageView imvNavArrow;
@@ -204,10 +207,15 @@ public class MapsActivity extends AppCompatActivity
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View restroomPopup = inflater.inflate(R.layout.restroom_popup, null);
 
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+
+        int width = size.x;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
 
-        final PopupWindow popupWindow = new PopupWindow(restroomPopup, width, height);
+        final PopupWindow popupWindow = new PopupWindow(restroomPopup, width - 100, height);
+
 
         popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 300);
 
@@ -218,14 +226,14 @@ public class MapsActivity extends AppCompatActivity
         TextView tvRateCount = restroomPopup.findViewById(R.id.tvRateCount);
 
         tvAddress.setText(closest.getName());
-        tvLocDistance.setText(String.valueOf(dist));
+        tvLocDistance.setText(String.format("%.2f", dist) + " m");
         tvRatings.setText(String.valueOf(closest.getRating()));
         // TODO : how to count users -- tvRateCount.setText();
         // TODO : category filters (recyclerview)
 
 
         // listener for navigate arrow btn in Popup window
-        this.imvNavArrow = findViewById(R.id.imvArrow);
+        this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
         imvNavArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,8 +241,14 @@ public class MapsActivity extends AppCompatActivity
                 Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
 
                 i.putExtra(MapsActivity.ADDRESS_TAG, closest.getName());
-                i.putExtra(MapsActivity.DISTANCE_TAG, String.valueOf(dist));
+                i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", dist));
                 i.putExtra(MapsActivity.RATING_TAG, String.valueOf(closest.getRating()));
+
+                i.putExtra(MapsActivity.CATEG_PAID, closest.getCateg_paid());
+                i.putExtra(MapsActivity.CATEG_DISABILITY, closest.getCateg_disability());
+                i.putExtra(MapsActivity.CATEG_BIDET, closest.getCateg_bidet());
+                i.putExtra(MapsActivity.CATEG_LOCTYPE, closest.getCateg_loc_type());
+                i.putExtra(MapsActivity.CATEG_TOILETRIES, closest.getCateg_toiletries());
 //                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
                 // putExtra() for filters
 
@@ -253,20 +267,26 @@ public class MapsActivity extends AppCompatActivity
             Location.distanceBetween(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0), currentLocation.getLatitude(), currentLocation.getLongitude(), results);
 
             tvAddress.setText(restroom.getName());
-            tvLocDistance.setText(String.valueOf(results[0]));
+            tvLocDistance.setText(String.format("%.2f", results[0]) + " m");
             tvRatings.setText(String.valueOf(restroom.getRating()));
 
             // listener for navigate arrow btn in Popup window (to handle updated clicked markers)
-            this.imvNavArrow = findViewById(R.id.imvArrow);
+            this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
             imvNavArrow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // navigate to <View Restroom Details activity>
-                    Intent i = new Intent();
+                    Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
 
                     i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
-                    i.putExtra(MapsActivity.DISTANCE_TAG, String.valueOf(results[0]));
+                    i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", results[0]));
                     i.putExtra(MapsActivity.RATING_TAG, String.valueOf(restroom.getRating()));
+
+                    i.putExtra(MapsActivity.CATEG_PAID, restroom.getCateg_paid());
+                    i.putExtra(MapsActivity.CATEG_DISABILITY, restroom.getCateg_disability());
+                    i.putExtra(MapsActivity.CATEG_BIDET, restroom.getCateg_bidet());
+                    i.putExtra(MapsActivity.CATEG_LOCTYPE, restroom.getCateg_loc_type());
+                    i.putExtra(MapsActivity.CATEG_TOILETRIES, restroom.getCateg_toiletries());
 //                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
                     // putExtra() for filters
 
@@ -278,6 +298,7 @@ public class MapsActivity extends AppCompatActivity
         });
 
         enableMyLocation();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
     }
 
     // Convert vector to bitmap
