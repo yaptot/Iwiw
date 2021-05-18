@@ -15,14 +15,21 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -32,6 +39,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -45,11 +53,14 @@ public class MapsActivity extends AppCompatActivity
         ActivityCompat.OnRequestPermissionsResultCallback, GoogleMap.OnMyLocationClickListener,
         GoogleMap.OnMyLocationButtonClickListener {
 
-    private GoogleMap mMap;
+    private GoogleMap mMap; //Map
     private ActivityMapsBinding binding;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance(); // Database Instance
+    private FusedLocationProviderClient fusedLocationClient; // Location Services
+    private LocationCallback locationCallback;
 
-    private ArrayList<Restroom> restrooms = new ArrayList<>();
+    private ArrayList<Restroom> restrooms = new ArrayList<>(); // Restrooms available
+    Location currentLocation; // Current Location
 
     /**
      * Request code for location permission request.
@@ -65,6 +76,24 @@ public class MapsActivity extends AppCompatActivity
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Instantiate Location Services
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        getLastLoc();
+
+        // Instantiate Callback Function for lcoation updates
+        locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null) {
+                    return;
+                }
+                for (Location location : locationResult.getLocations()) {
+                    currentLocation = location;
+                }
+            }
+        };
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -75,9 +104,9 @@ public class MapsActivity extends AppCompatActivity
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 // If there are results
-                if(task.isSuccessful()) {
+                if (task.isSuccessful()) {
                     // Add each restroom to the restrooms ArrayList
-                    for(QueryDocumentSnapshot document : task.getResult()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
                         restrooms.add(document.toObject(Restroom.class));
                     }
 
@@ -86,8 +115,26 @@ public class MapsActivity extends AppCompatActivity
                     Log.d("query", "NO RESTROOMS");
             }
         });
+    }
 
-
+    // Gets the last location of the user
+    public void getLastLoc() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        currentLocation = location;
+                        if (location != null) {
+                            // Logic to handle location object
+                            Log.d("null location", "Location is null");
+                        }
+                    }
+                });
     }
 
     private void callMap(SupportMapFragment mapFragment) {
@@ -107,9 +154,22 @@ public class MapsActivity extends AppCompatActivity
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a markers to the map
-        for(Restroom restroom : restrooms) {
+        float dist = 0; // Stores the distance of the closest restroom to the user
+        Restroom closest = new Restroom(); // Stores the information of the closest restroom to the user
+
+
+        for (Restroom restroom : restrooms) {
             LatLng point = new LatLng(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0));
+
+            // Computes the distance of the restroom to the user
+            float[] results = new float[1];
+            Location.distanceBetween(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0), currentLocation.getLatitude(), currentLocation.getLongitude(), results);
+            if (dist == 0 || results[0] < dist) {
+                dist = results[0];
+                closest = restroom;
+            }
+
+            // Add a marker to the map
             mMap.addMarker(
                     new MarkerOptions()
                             .position(point)
@@ -117,33 +177,42 @@ public class MapsActivity extends AppCompatActivity
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_marker))).setTag(restroom);
         }
 
+        // Creates a popup window to initially show the closest restroom to the user
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        View restroomPopup = inflater.inflate(R.layout.restroom_popup, null);
+
+        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
+        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
+
+        final PopupWindow popupWindow = new PopupWindow(restroomPopup, width, height);
+
+        popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 300);
+
+        // Get the components inside the popup window
+        TextView tvAddress = restroomPopup.findViewById(R.id.tvAddress);
+        TextView tvLocDistance = restroomPopup.findViewById(R.id.tvLocDistance);
+        TextView tvRatings = restroomPopup.findViewById(R.id.tvRatings);
+        TextView tvRateCount = restroomPopup.findViewById(R.id.tvRateCount);
+
+        tvAddress.setText(closest.getName());
+        tvLocDistance.setText(String.valueOf(dist));
+        tvRatings.setText(String.valueOf(closest.getRating()));
+        // TODO : how to count users yada -- tvRateCount.setText();
+        // TODO : categ filters (recyclerview)
+
+
         // Marker onClick Listener
         mMap.setOnMarkerClickListener(marker -> {
             Restroom restroom = (Restroom) marker.getTag();
 
             Log.d("info", restroom.getName());
 
-            LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-            View restroomPopup = inflater.inflate(R.layout.restroom_popup, null);
-
-            int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-            int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-
-            final PopupWindow popupWindow = new PopupWindow(restroomPopup, width, height);
-
-            popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM,0,300 );
-
-            // set text for Popup window
-            TextView tvAddress = restroomPopup.findViewById(R.id.tvAddress);
-            TextView tvLocDistance = restroomPopup.findViewById(R.id.tvLocDistance);
-            TextView tvRatings = restroomPopup.findViewById(R.id.tvRatings);
-            TextView tvRateCount = restroomPopup.findViewById(R.id.tvRateCount);
-
             tvAddress.setText(restroom.getName());
-            // TODO : how to calculate for this? -- tvLocDistance.setText();
+            float[] results = new float[1];
+            Location.distanceBetween(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0), currentLocation.getLatitude(), currentLocation.getLongitude(), results);
+
+            tvLocDistance.setText(String.valueOf(results[0]));
             tvRatings.setText(String.valueOf(restroom.getRating()));
-            // TODO : how to count users? -- tvRateCount.setText();
-            // TODO : category filters (recyclerview)
 
             return true;
         });
@@ -151,7 +220,7 @@ public class MapsActivity extends AppCompatActivity
         enableMyLocation();
     }
 
-    // Convert vector to bitmap I guess
+    // Convert vector to bitmap
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
         Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
         vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
@@ -185,4 +254,23 @@ public class MapsActivity extends AppCompatActivity
     public boolean onMyLocationButtonClick() {
         return false;
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startLocationUpdates();
+    }
+
+    // Updates location when it changes
+    private void startLocationUpdates() {
+        LocationRequest locationRequest = LocationRequest.create();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+
+        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+    }
+
+
+
 }
