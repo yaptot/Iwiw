@@ -12,8 +12,9 @@ import android.widget.LinearLayout;
 public class SearchActivity extends AppCompatActivity {
     // TAG declarations
     public static final String SEARCH_ACTIVITY = "Search Activity";
-    public static final String KEYWORD_QUERY = "Search Keyword";
-    public static final String CATEG_QUERY = "Search Filter";
+    public static final String QUERY_TAG = "Search Keyword";
+    public static final String IS_KEYWORD = "Keyword or Category Filter";
+    public static final String CATEG_ID = "Category ID";
 
     // component declarations
     private Button btnSearch;
@@ -34,8 +35,6 @@ public class SearchActivity extends AppCompatActivity {
 
     // local var declarations
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,18 +49,168 @@ public class SearchActivity extends AppCompatActivity {
                 String strSearch = etSearch.getText().toString();
                 // navigate to <Search Results activity>
                 Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
-                i.putExtra(SearchActivity.KEYWORD_QUERY, strSearch);
+                i.putExtra(SearchActivity.QUERY_TAG, strSearch);
+                i.putExtra(SearchActivity.IS_KEYWORD, true);
                 startActivity(i);
             }
         });
 
-        // listeners for each category tab
+        // Category references (CATEG_ID, QUERY_TAG)
+        // 1 - Bidet
+        // 2 - Disability
+        // 3 - Location Type
+        // 4 - Paid
+        // 5 - Toiletries
+
+        // listeners for Bidet tab
+        ll_categBidet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Bidet");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 1);
+                startActivity(i);
+            }
+        });
+        ll_categNoBidet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "No bidet");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 1);
+                startActivity(i);
+            }
+        });
+
+        // listeners for Disability tab
+        ll_categDisability.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Disability access");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 2);
+                startActivity(i);
+            }
+        });
+        ll_categNoDisability.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "No disabled");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 2);
+                startActivity(i);
+            }
+        });
+
+        // listeners for Location Type tab
+        ll_categMall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Mall");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 3);
+                startActivity(i);
+            }
+        });
+        ll_categRestaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Restaurant");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 3);
+                startActivity(i);
+            }
+        });
+        ll_categPark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Park");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 3);
+                startActivity(i);
+            }
+        });
+        ll_categOthers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Others");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 3);
+                startActivity(i);
+            }
+        });
+
+        // listeners for Paid/Free tab
+        ll_categPaid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Paid");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 4);
+                startActivity(i);
+            }
+        });
         ll_categFree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // navigate to <Search Results activity>
                 Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
-                i.putExtra(SearchActivity.CATEG_QUERY, "Free");
+                i.putExtra(SearchActivity.QUERY_TAG, "Free");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 4);
+                startActivity(i);
+            }
+        });
+
+        // listeners for Toiletries tab
+        ll_categTissue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Tissue");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 5);
+                startActivity(i);
+            }
+        });
+        ll_categSoap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Soap");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 5);
+                startActivity(i);
+            }
+        });
+        ll_categNapkin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Search Results activity>
+                Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                i.putExtra(SearchActivity.QUERY_TAG, "Napkin");
+                i.putExtra(SearchActivity.IS_KEYWORD, false);
+                i.putExtra(SearchActivity.CATEG_ID, 5);
                 startActivity(i);
             }
         });
