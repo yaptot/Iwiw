@@ -75,7 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_paid">
+                android:background="@drawable/shape_categ_paid"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -96,7 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_paid">
+                android:background="@drawable/shape_categ_paid"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -117,7 +119,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_disability">
+                android:background="@drawable/shape_categ_disability"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -138,7 +141,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_disability">
+                android:background="@drawable/shape_categ_disability"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -167,7 +171,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_bidet">
+                android:background="@drawable/shape_categ_bidet"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -188,7 +193,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_bidet">
+                android:background="@drawable/shape_categ_bidet"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -209,7 +215,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_loc_type">
+                android:background="@drawable/shape_categ_loc_type"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -230,7 +237,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_loc_type">
+                android:background="@drawable/shape_categ_loc_type"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -251,7 +259,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_loc_type">
+                android:background="@drawable/shape_categ_loc_type"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -278,7 +287,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_loc_type">
+                android:background="@drawable/shape_categ_loc_type"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -299,7 +309,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_toiletries">
+                android:background="@drawable/shape_categ_toiletries"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -320,7 +331,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_toiletries">
+                android:background="@drawable/shape_categ_toiletries"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -341,7 +353,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/shape_categ_toiletries">
+                android:background="@drawable/shape_categ_toiletries"
+                android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -360,5 +373,17 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/search_btnSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SEARCH"
+        app:layout_constraintBottom_toTopOf="@+id/etSearch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toEndOf="@+id/tvSearchResults"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.807" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

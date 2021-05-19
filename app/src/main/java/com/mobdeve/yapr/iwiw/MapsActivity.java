@@ -86,7 +86,7 @@ public class MapsActivity extends AppCompatActivity
     private LocationCallback locationCallback;
 
     private ArrayList<Restroom> restrooms = new ArrayList<>(); // Restrooms available
-    Location currentLocation; // Current Location
+    public static Location currentLocation; // Current Location
     private Restroom closest;
     private float dist;
 
@@ -97,7 +97,6 @@ public class MapsActivity extends AppCompatActivity
 
     /**
      * Request code for location permission request.
-     *
      * @see #onRequestPermissionsResult(int, String[], int[])
      */
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
