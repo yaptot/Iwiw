@@ -15,6 +15,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="7dp"
         android:layout_weight="1"
+        android:fontFamily="@font/varela_round"
         android:text="Test"
         android:textColor="#00BD9D"
         android:textSize="12sp" />

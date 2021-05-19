@@ -76,6 +76,7 @@ public class MapsActivity extends AppCompatActivity
     // component declarations
     private ImageView imvNavArrow;
     private BottomNavigationView navBar;
+    private ImageView btnSearch;
 
     // var declarations
     private GoogleMap mMap; //Map
@@ -114,6 +115,15 @@ public class MapsActivity extends AppCompatActivity
         getLastLoc();
         navBar = findViewById(R.id.mapNav);
         navBar.setSelectedItemId(R.id.mapIc);
+
+        btnSearch = findViewById(R.id.btnSearch);
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MapsActivity.this, SearchActivity.class);
+                startActivity(i);
+            }
+        });
 
         // Instantiate Callback Function for location updates
         locationCallback = new LocationCallback() {
@@ -373,6 +383,12 @@ public class MapsActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         startLocationUpdates();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 
     // Updates location when it changes
