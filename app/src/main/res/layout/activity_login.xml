@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:ems="10"
+            android:fontFamily="@font/varela_round"
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:textColor="#01120F"
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
+            android:fontFamily="@font/varela_round"
             android:hint="Password"
             android:inputType="textPassword"
             android:textColor="#01120F"
@@ -55,6 +57,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:backgroundTint="#54DEFD"
+            android:fontFamily="@font/varela_round"
             android:text="LOGIN" />
 
         <TextView
@@ -64,6 +67,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:clickable="true"
+            android:fontFamily="@font/varela_round"
             android:text="No account yet? Register here."
             android:textColor="#54DEFD"
             android:textSize="14sp" />
