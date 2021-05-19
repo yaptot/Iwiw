@@ -4,14 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.RestrictionsManager;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -24,7 +22,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,12 +44,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 import com.mobdeve.yapr.iwiw.databinding.ActivityMapsBinding;
 
 import java.util.ArrayList;
@@ -92,7 +87,7 @@ public class MapsActivity extends AppCompatActivity
 
     // for RecyclerView component
     private ArrayList<String> strCategList;
-    RecyclerView rvCategList;
+    private RecyclerView rvCategList;
     private CategAdapter adapter;
 
     /**
@@ -238,8 +233,8 @@ public class MapsActivity extends AppCompatActivity
         // Get the components inside the popup window
         TextView tvAddress = restroomPopup.findViewById(R.id.tvAddress);
         TextView tvLocDistance = restroomPopup.findViewById(R.id.tvLocDistance);
-        TextView tvRatings = restroomPopup.findViewById(R.id.tvRatings);
-        TextView tvRateCount = restroomPopup.findViewById(R.id.tvRateCount);
+        TextView tvRatings = restroomPopup.findViewById(R.id.sr_tvRatings);
+        TextView tvRateCount = restroomPopup.findViewById(R.id.sr_tvRateCount);
 
         tvAddress.setText(closest.getName());
         tvLocDistance.setText(String.format("%.2f", dist) + " m");

@@ -3,6 +3,8 @@ package com.mobdeve.yapr.iwiw;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
@@ -10,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.model.LatLng;
@@ -28,9 +31,18 @@ public class SearchResultsActivity extends AppCompatActivity {
     // TAG declarations
     private static final String SR_ACTIVITY = "Search_Results_Activity";
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-    //
+
+    // dependency declarations
     private FirebaseFirestore db = FirebaseFirestore.getInstance(); // Database Instance
     private FusedLocationProviderClient fusedLocationClient; // Location Services
+
+    // Component declaration
+    private TextView tvSearchResults;
+
+    // for RecyclerView component
+    private RecyclerView rvSearchResults;
+    private ResultsAdapter adapter;
+
 
     // var declarations
     ArrayList<Restroom> restroomList;
@@ -55,8 +67,12 @@ public class SearchResultsActivity extends AppCompatActivity {
         if (isKeyword) firebaseSearch(strSearch);
         else firebaseSearchCateg(strSearch, cID);
 
-
         // pass to rv Adapter when query is finished
+        rvSearchResults = findViewById(R.id.rvSearchResults);
+        adapter = new ResultsAdapter(restroomDistArray, this);
+
+        this.tvSearchResults = findViewById(R.id.tvSearchResults);
+        tvSearchResults.append(" " + "\"" + strSearch + "\"");
     }
 
     public void firebaseSearch(String strKey) {
@@ -85,6 +101,9 @@ public class SearchResultsActivity extends AppCompatActivity {
 
                     for (RestroomDist r : restroomDistArray)
                         Log.d(SR_ACTIVITY, "Results: name - " + r.getRestroom().getName() + "// dist - " + r.getDistance());
+
+                    rvSearchResults.setAdapter(adapter);
+                    rvSearchResults.setLayoutManager(new LinearLayoutManager(SearchResultsActivity.this, LinearLayoutManager.VERTICAL, false));
 
                 } else
                     Log.d(SR_ACTIVITY, "Query: No keyword exists in restrooms db");
@@ -128,6 +147,9 @@ public class SearchResultsActivity extends AppCompatActivity {
 
                     for (RestroomDist r : restroomDistArray)
                         Log.d(SR_ACTIVITY, "Results: name - " + r.getRestroom().getName() + "// dist - " + r.getDistance());
+
+                    rvSearchResults.setAdapter(adapter);
+                    rvSearchResults.setLayoutManager(new LinearLayoutManager(SearchResultsActivity.this, LinearLayoutManager.VERTICAL, false));
                 } else
                     Log.d(SR_ACTIVITY, "Query: No searched restroom category");
             }

@@ -11,17 +11,6 @@
     android:background="@drawable/shape_details"
     android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_CategList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="10dp"
-        android:visibility="visible">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,7 +20,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvAddress"
+            android:id="@+id/sr_tvAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -43,7 +32,7 @@
             android:textStyle="bold" />
 
         <ImageView
-            android:id="@+id/imvArrow"
+            android:id="@+id/sr_imvArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -61,7 +50,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tvLocDistance"
+            android:id="@+id/sr_tvLocDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
