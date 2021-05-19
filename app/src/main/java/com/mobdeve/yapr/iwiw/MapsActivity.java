@@ -252,39 +252,7 @@ public class MapsActivity extends AppCompatActivity
 
         strCategList = new ArrayList<>();
 
-        strCategList.add(closest.getCateg_paid());
-        strCategList.add(closest.getCateg_disability());
-        strCategList.add(closest.getCateg_bidet());
-        strCategList.add(closest.getCateg_loc_type());
-        strCategList.addAll(closest.getCateg_toiletries());
-
-        adapter = new CategAdapter(strCategList, this);
-        rvCategList.setAdapter(adapter);
-        rvCategList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        // listener for navigate arrow btn in Popup window
-        this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
-        imvNavArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // navigate to <View Restroom Details activity>
-                Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
-
-                i.putExtra(MapsActivity.ADDRESS_TAG, closest.getName());
-                i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", dist));
-                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(closest.getRating()));
-
-                i.putExtra(MapsActivity.CATEG_PAID, closest.getCateg_paid());
-                i.putExtra(MapsActivity.CATEG_DISABILITY, closest.getCateg_disability());
-                i.putExtra(MapsActivity.CATEG_BIDET, closest.getCateg_bidet());
-                i.putExtra(MapsActivity.CATEG_LOCTYPE, closest.getCateg_loc_type());
-                i.putExtra(MapsActivity.CATEG_TOILETRIES, closest.getCateg_toiletries());
-//                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
-
-                startActivity(i);
-
-            }
-        });
+        setupPopup(closest, dist, restroomPopup);
 
         // Marker onClick Listener
         mMap.setOnMarkerClickListener(marker -> {
@@ -299,49 +267,53 @@ public class MapsActivity extends AppCompatActivity
             tvLocDistance.setText(String.format("%.2f", results[0]) + " m");
             tvRatings.setText(String.valueOf(restroom.getRating()));
 
-            // setting Adapter to populate the data into RecyclerView -> binding them to each other
-            this.rvCategList = restroomPopup.findViewById(R.id.rv_CategList);
-            strCategList = new ArrayList<>();
-
-            strCategList.add(restroom.getCateg_paid());
-            strCategList.add(restroom.getCateg_disability());
-            strCategList.add(restroom.getCateg_bidet());
-            strCategList.add(restroom.getCateg_loc_type());
-            strCategList.addAll(restroom.getCateg_toiletries());
-
-            adapter = new CategAdapter(strCategList, this);
-            rvCategList.setAdapter(adapter);
-            rvCategList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-            // listener for navigate arrow btn in Popup window (to handle updated clicked markers)
-            this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
-            imvNavArrow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // navigate to <View Restroom Details activity>
-                    Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
-
-                    i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
-                    i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", results[0]));
-                    i.putExtra(MapsActivity.RATING_TAG, String.valueOf(restroom.getRating()));
-
-                    i.putExtra(MapsActivity.CATEG_PAID, restroom.getCateg_paid());
-                    i.putExtra(MapsActivity.CATEG_DISABILITY, restroom.getCateg_disability());
-                    i.putExtra(MapsActivity.CATEG_BIDET, restroom.getCateg_bidet());
-                    i.putExtra(MapsActivity.CATEG_LOCTYPE, restroom.getCateg_loc_type());
-                    i.putExtra(MapsActivity.CATEG_TOILETRIES, restroom.getCateg_toiletries());
-//                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
-                    // putExtra() for filters
-
-                    startActivity(i);
-                }
-            });
+            setupPopup(restroom, results[0], restroomPopup);
 
             return true;
         });
 
         enableMyLocation();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
+    }
+
+
+
+    private void setupPopup(Restroom restroom, float results, View restroomPopup) {
+        strCategList = new ArrayList<>();
+
+        strCategList.add(restroom.getCateg_paid());
+        strCategList.add(restroom.getCateg_disability());
+        strCategList.add(restroom.getCateg_bidet());
+        strCategList.add(restroom.getCateg_loc_type());
+        strCategList.addAll(restroom.getCateg_toiletries());
+
+        adapter = new CategAdapter(strCategList, this);
+        rvCategList.setAdapter(adapter);
+        rvCategList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        // listener for navigate arrow btn in Popup window (to handle updated clicked markers)
+        this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
+        imvNavArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <View Restroom Details activity>
+                Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
+
+                i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
+                i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", results));
+                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(restroom.getRating()));
+
+                i.putExtra(MapsActivity.CATEG_PAID, restroom.getCateg_paid());
+                i.putExtra(MapsActivity.CATEG_DISABILITY, restroom.getCateg_disability());
+                i.putExtra(MapsActivity.CATEG_BIDET, restroom.getCateg_bidet());
+                i.putExtra(MapsActivity.CATEG_LOCTYPE, restroom.getCateg_loc_type());
+                i.putExtra(MapsActivity.CATEG_TOILETRIES, restroom.getCateg_toiletries());
+//                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
+                // putExtra() for filters
+
+                startActivity(i);
+            }
+        });
     }
 
     // Convert vector to bitmap
