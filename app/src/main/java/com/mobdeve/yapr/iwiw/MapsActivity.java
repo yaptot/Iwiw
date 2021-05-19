@@ -47,6 +47,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationMenu;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -73,6 +75,7 @@ public class MapsActivity extends AppCompatActivity
 
     // component declarations
     private ImageView imvNavArrow;
+    private BottomNavigationView navBar;
 
     // var declarations
     private GoogleMap mMap; //Map
@@ -109,6 +112,8 @@ public class MapsActivity extends AppCompatActivity
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         getLastLoc();
+        navBar = findViewById(R.id.mapNav);
+        navBar.setSelectedItemId(R.id.mapIc);
 
         // Instantiate Callback Function for location updates
         locationCallback = new LocationCallback() {
@@ -231,11 +236,21 @@ public class MapsActivity extends AppCompatActivity
         tvLocDistance.setText(String.format("%.2f", dist) + " m");
         tvRatings.setText(String.valueOf(closest.getRating()));
         // TODO : how to count users -- tvRateCount.setText();
+
         // setting Adapter to populate the data into RecyclerView -> binding them to each other
-        this.rvCategList = findViewById(R.id.rv_CategList);
-        adapter = new CategAdapter(closest.getCateg_toiletries(), this);
+        this.rvCategList = restroomPopup.findViewById(R.id.rv_CategList);
+
+        strCategList = new ArrayList<>();
+
+        strCategList.add(closest.getCateg_paid());
+        strCategList.add(closest.getCateg_disability());
+        strCategList.add(closest.getCateg_bidet());
+        strCategList.add(closest.getCateg_loc_type());
+        strCategList.addAll(closest.getCateg_toiletries());
+
+        adapter = new CategAdapter(strCategList, this);
         rvCategList.setAdapter(adapter);
-        rvCategList.setLayoutManager(new LinearLayoutManager(this));
+        rvCategList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // listener for navigate arrow btn in Popup window
         this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
@@ -275,10 +290,18 @@ public class MapsActivity extends AppCompatActivity
             tvRatings.setText(String.valueOf(restroom.getRating()));
 
             // setting Adapter to populate the data into RecyclerView -> binding them to each other
-            this.rvCategList = findViewById(R.id.rv_CategList);
-            adapter = new CategAdapter(restroom.getCateg_toiletries(), this);
+            this.rvCategList = restroomPopup.findViewById(R.id.rv_CategList);
+            strCategList = new ArrayList<>();
+
+            strCategList.add(restroom.getCateg_paid());
+            strCategList.add(restroom.getCateg_disability());
+            strCategList.add(restroom.getCateg_bidet());
+            strCategList.add(restroom.getCateg_loc_type());
+            strCategList.addAll(restroom.getCateg_toiletries());
+
+            adapter = new CategAdapter(strCategList, this);
             rvCategList.setAdapter(adapter);
-            rvCategList.setLayoutManager(new LinearLayoutManager(this));
+            rvCategList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
             // listener for navigate arrow btn in Popup window (to handle updated clicked markers)
             this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
