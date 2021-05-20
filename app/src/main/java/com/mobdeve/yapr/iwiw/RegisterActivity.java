@@ -110,10 +110,6 @@ public class RegisterActivity extends AppCompatActivity {
                 // User is considered to be logged in, proceed to Maps activity
                 if (isValid) {
                     createUser(email, pass, username);
-                    Intent i = new Intent(RegisterActivity.this, MapsActivity.class);
-                    // pass username
-                    i.putExtra(USERNAME_TAG, username);
-                    startActivity(i);
                 }
             }
         });
@@ -145,28 +141,34 @@ public class RegisterActivity extends AppCompatActivity {
 //                            mAuth = FirebaseAuth.getInstance();
                             currUser = mAuth.getCurrentUser();
 
-                            // set username of User
-                            UserProfileChangeRequest setName = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(uname)
-                                    .build();
-
-                            currUser.updateProfile(setName).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Log.d(REG_ACTIVITY, "User registered: " + currUser.getDisplayName().toString());
-                                        finish();
-                                    } else {
-                                        Log.d(REG_ACTIVITY, "Failed set username. /n", task.getException());
-                                    }
-                                }
-                            });
+                            addUsername(uname);
                         } else {
                             Log.d(REG_ACTIVITY, "Failed register. /n", task.getException());
                             Toast.makeText(RegisterActivity.this, "Register Failed. Please check credentials.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+    }
+
+    public void addUsername(String uname) {
+        // set username of User
+        UserProfileChangeRequest setName = new UserProfileChangeRequest.Builder()
+                .setDisplayName(uname)
+                .build();
+
+        currUser.updateProfile(setName).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Log.d(REG_ACTIVITY, "User registered: " + currUser.getDisplayName());
+                    Intent i = new Intent(RegisterActivity.this, MapsActivity.class);
+                    startActivity(i);
+                    finish();
+                } else {
+                    Log.d(REG_ACTIVITY, "Failed set username. /n", task.getException());
+                }
+            }
+        });
     }
 
 }

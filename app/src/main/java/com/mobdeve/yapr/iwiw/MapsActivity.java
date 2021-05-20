@@ -227,7 +227,7 @@ public class MapsActivity extends AppCompatActivity
 
         popupWindow = new PopupWindow(restroomPopup, width - 100, height);
 
-        popupWindow.showAtLocation(findViewById(R.id.constraintMain), Gravity.BOTTOM, 0, 300);
+        popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 300);
 
         // Get the components inside the popup window
         TextView tvAddress = restroomPopup.findViewById(R.id.tvAddress);
@@ -355,10 +355,14 @@ public class MapsActivity extends AppCompatActivity
         if(currUser != null) {
             findViewById(R.id.ll_login).setVisibility(View.GONE);
             findViewById(R.id.ll_logout).setVisibility(View.VISIBLE);
+            TextView tv = findViewById(R.id.tvNavTitle);
+            tv.setText(currUser.getDisplayName());
         }
         else {
             findViewById(R.id.ll_logout).setVisibility(View.GONE);
             findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
+            TextView tv = findViewById(R.id.tvNavTitle);
+            tv.setText("Iwiw");
         }
 
 
@@ -436,6 +440,8 @@ public class MapsActivity extends AppCompatActivity
         FirebaseAuth.getInstance().signOut();
         findViewById(R.id.ll_logout).setVisibility(View.GONE);
         findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
+        TextView tv = findViewById(R.id.tvNavTitle);
+        tv.setText("Iwiw");
     }
 
 
