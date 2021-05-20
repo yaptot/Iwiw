@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class RegisterActivity extends AppCompatActivity {
     // TAG declarations
@@ -108,7 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 // User is considered to be logged in, proceed to Maps activity
                 if (isValid) {
-                    createUser(email, pass);
+                    createUser(email, pass, username);
                     Intent i = new Intent(RegisterActivity.this, MapsActivity.class);
                     // pass username
                     i.putExtra(USERNAME_TAG, username);
@@ -134,15 +135,32 @@ public class RegisterActivity extends AppCompatActivity {
         return !strEmail.isEmpty() && Patterns.EMAIL_ADDRESS.matcher(strEmail).matches();
     }
 
-    public void createUser (String email, String password){
+    public void createUser (String email, String password, String uname){
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
+//                            // Initialize Firebase Auth
+//                            mAuth = FirebaseAuth.getInstance();
                             currUser = mAuth.getCurrentUser();
-                            Log.d(REG_ACTIVITY, "User registered: " + currUser.getDisplayName().toString());
-                            finish();
+
+                            // set username of User
+                            UserProfileChangeRequest setName = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(uname)
+                                    .build();
+
+                            currUser.updateProfile(setName).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(REG_ACTIVITY, "User registered: " + currUser.getDisplayName().toString());
+                                        finish();
+                                    } else {
+                                        Log.d(REG_ACTIVITY, "Failed set username. /n", task.getException());
+                                    }
+                                }
+                            });
                         } else {
                             Log.d(REG_ACTIVITY, "Failed register. /n", task.getException());
                             Toast.makeText(RegisterActivity.this, "Register Failed. Please check credentials.", Toast.LENGTH_SHORT).show();
