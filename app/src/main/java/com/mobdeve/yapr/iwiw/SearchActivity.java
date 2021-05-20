@@ -35,10 +35,36 @@ public class SearchActivity extends AppCompatActivity {
 
     // local var declarations
 
+    // TEST
+    private Button test_btnReg;
+    private Button test_btnLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        // TEST
+        this.test_btnReg = findViewById(R.id.test_btnReg);
+        this.test_btnReg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SearchActivity.this, RegisterActivity.class);
+                startActivity(i);
+            }
+        });
+
+        // TEST
+        this.test_btnLogin = findViewById(R.id.test_btnLogin);
+        this.test_btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SearchActivity.this, LoginActivity.class);
+                startActivity(i);
+            }
+        });
+
+
 
         initComponents();
 
