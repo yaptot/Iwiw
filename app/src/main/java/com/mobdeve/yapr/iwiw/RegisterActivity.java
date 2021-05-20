@@ -142,6 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()){
                             currUser = mAuth.getCurrentUser();
                             Log.d(REG_ACTIVITY, "User registered: " + currUser.getDisplayName().toString());
+                            finish();
                         } else {
                             Log.d(REG_ACTIVITY, "Failed register. /n", task.getException());
                             Toast.makeText(RegisterActivity.this, "Register Failed. Please check credentials.", Toast.LENGTH_SHORT).show();

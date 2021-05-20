@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,28 +45,6 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        // TEST
-        this.test_btnReg = findViewById(R.id.test_btnReg);
-        this.test_btnReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(SearchActivity.this, RegisterActivity.class);
-                startActivity(i);
-            }
-        });
-
-        // TEST
-        this.test_btnLogin = findViewById(R.id.test_btnLogin);
-        this.test_btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(SearchActivity.this, LoginActivity.class);
-                startActivity(i);
-            }
-        });
-
-
-
         initComponents();
 
         // listener for Search btn
@@ -78,6 +57,21 @@ public class SearchActivity extends AppCompatActivity {
                 i.putExtra(SearchActivity.QUERY_TAG, strSearch);
                 i.putExtra(SearchActivity.IS_KEYWORD, true);
                 startActivity(i);
+            }
+        });
+
+        etSearch.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    String strSearch = etSearch.getText().toString();
+                    Intent i = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                    i.putExtra(SearchActivity.QUERY_TAG, strSearch);
+                    i.putExtra(SearchActivity.IS_KEYWORD, true);
+                    startActivity(i);
+                    return true;
+                }
+                return false;
             }
         });
 

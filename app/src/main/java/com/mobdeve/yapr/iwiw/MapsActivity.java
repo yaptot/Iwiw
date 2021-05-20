@@ -49,6 +49,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -73,14 +75,16 @@ public class MapsActivity extends AppCompatActivity
 
     // component declarations
     private ImageView imvNavArrow;
-    private ImageView btnSearch;
     public DrawerLayout drawerLayout;
+    private PopupWindow popupWindow;
 
     // var declarations
     private GoogleMap mMap; //Map
     private FirebaseFirestore db = FirebaseFirestore.getInstance(); // Database Instance
     private FusedLocationProviderClient fusedLocationClient; // Location Services
     private LocationCallback locationCallback;
+    private FirebaseAuth mAuth; // Firebase authentication
+    private FirebaseUser currUser; // Current user logged in (if any)
 
     private ArrayList<Restroom> restrooms = new ArrayList<>(); // Restrooms available
     public static Location currentLocation; // Current Location
@@ -105,19 +109,11 @@ public class MapsActivity extends AppCompatActivity
 
         drawerLayout = findViewById(R.id.drawerLayout);
 
+
         // Instantiate Location Services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         getLastLoc();
-
-        btnSearch = findViewById(R.id.btnSearch);
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MapsActivity.this, SearchActivity.class);
-                startActivity(i);
-            }
-        });
 
         // Instantiate Callback Function for location updates
         locationCallback = new LocationCallback() {
@@ -229,9 +225,9 @@ public class MapsActivity extends AppCompatActivity
         int width = size.x;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
 
-        final PopupWindow popupWindow = new PopupWindow(restroomPopup, width - 100, height);
+        popupWindow = new PopupWindow(restroomPopup, width - 100, height);
 
-        popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 300);
+        popupWindow.showAtLocation(findViewById(R.id.constraintMain), Gravity.BOTTOM, 0, 300);
 
         // Get the components inside the popup window
         TextView tvAddress = restroomPopup.findViewById(R.id.tvAddress);
@@ -349,6 +345,26 @@ public class MapsActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        // get Firebase instance
+        mAuth = FirebaseAuth.getInstance();
+        // get current user
+        currUser = mAuth.getCurrentUser();
+        if(currUser != null) {
+            findViewById(R.id.ll_login).setVisibility(View.GONE);
+            findViewById(R.id.ll_logout).setVisibility(View.VISIBLE);
+        }
+        else {
+            findViewById(R.id.ll_logout).setVisibility(View.GONE);
+            findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         startLocationUpdates();
@@ -380,6 +396,11 @@ public class MapsActivity extends AppCompatActivity
         drawerLayout.openDrawer(GravityCompat.START);
     }
 
+    public void clickSearch(View view) {
+        Intent i = new Intent(MapsActivity.this, SearchActivity.class);
+        startActivity(i);
+    }
+
     public void clickLogo(View view) {
         // Close Drawer
         closeDrawer(drawerLayout);
@@ -394,7 +415,7 @@ public class MapsActivity extends AppCompatActivity
 
     public void clickMap(View view) {
         // Recreate activity
-        recreate();
+
     }
 
     public void clickLogin(View view) {
@@ -409,6 +430,12 @@ public class MapsActivity extends AppCompatActivity
         // Initialize intent
         Intent i = new Intent(activity, aClass);
         activity.startActivity(i);
+    }
+
+    public void clickLogout(View view) {
+        FirebaseAuth.getInstance().signOut();
+        findViewById(R.id.ll_logout).setVisibility(View.GONE);
+        findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
     }
 
 

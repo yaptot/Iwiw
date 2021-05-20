@@ -25,7 +25,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="1dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:background="#49c6e5" />
@@ -57,26 +57,55 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:onClick="clickLogin" >
+        android:onClick="clickLogin"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Login"
-            android:padding="12dp"
             android:layout_marginStart="16dp"
-            android:textColor="#49c6e5"/>
+            android:layout_weight="1"
+            android:fontFamily="@font/varela_round"
+            android:padding="12dp"
+            android:text="Login"
+            android:textColor="#49c6e5" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="48dp"
             android:src="@drawable/ic_baseline_login_24"
+            app:tint="#49c6e5" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:onClick="clickLogout"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/varela_round"
+            android:padding="12dp"
+            android:text="Logout"
+            android:textColor="#49c6e5" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="48dp"
+            android:src="@drawable/ic_logout"
             app:tint="#49c6e5" />
 
     </LinearLayout>
