@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -48,7 +51,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mobdeve.yapr.iwiw.databinding.ActivityMapsBinding;
 
 import java.util.ArrayList;
 
@@ -70,12 +72,11 @@ public class MapsActivity extends AppCompatActivity
 
     // component declarations
     private ImageView imvNavArrow;
-    private BottomNavigationView navBar;
     private ImageView btnSearch;
+    public DrawerLayout drawerLayout;
 
     // var declarations
     private GoogleMap mMap; //Map
-    private ActivityMapsBinding binding;
     private FirebaseFirestore db = FirebaseFirestore.getInstance(); // Database Instance
     private FusedLocationProviderClient fusedLocationClient; // Location Services
     private LocationCallback locationCallback;
@@ -99,16 +100,14 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
 
-        binding = ActivityMapsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        drawerLayout = findViewById(R.id.drawerLayout);
 
         // Instantiate Location Services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         getLastLoc();
-        navBar = findViewById(R.id.mapNav);
-        navBar.setSelectedItemId(R.id.mapIc);
 
         btnSearch = findViewById(R.id.btnSearch);
         btnSearch.setOnClickListener(new View.OnClickListener() {
@@ -133,8 +132,11 @@ public class MapsActivity extends AppCompatActivity
         };
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragmentContainer, mapFragment)
+                .commit();
 
         // Get all restrooms from Firestore
         db.collection("restrooms").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -367,6 +369,46 @@ public class MapsActivity extends AppCompatActivity
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
+    public void clickMenu(View view) {
+        // Open drawer
+        openDrawer(drawerLayout);
+    }
+
+    public static void openDrawer(DrawerLayout drawerLayout) {
+        // Open drawer layout
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
+
+    public void clickLogo(View view) {
+        // Close Drawer
+        closeDrawer(drawerLayout);
+    }
+
+    public static void closeDrawer(DrawerLayout drawerLayout) {
+        // Close drawer layout
+        // Check condition
+        if(drawerLayout.isDrawerOpen(GravityCompat.START))
+            drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    public void clickMap(View view) {
+        // Recreate activity
+        recreate();
+    }
+
+    public void clickLogin(View view) {
+        redirectActivity();
+    }
+
+    private void redirectActivity() {
+        redirectActivity(this, LoginActivity.class);
+    }
+
+    public static void redirectActivity(Activity activity, Class aClass) {
+        // Initialize intent
+        Intent i = new Intent(activity, aClass);
+        activity.startActivity(i);
+    }
 
 
 }
