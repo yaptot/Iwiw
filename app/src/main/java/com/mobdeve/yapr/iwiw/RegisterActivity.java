@@ -10,6 +10,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -33,10 +34,10 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etPass;
     private EditText etConfirmPass;
     private Button btnReg;
+    private TextView tvLoginRedirect;
 
     // var declarations
     private boolean isValid = true;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         this.etPass = findViewById(R.id.reg_etPass);
         this.etConfirmPass = findViewById(R.id.reg_etConfirmPass);
         this.btnReg = findViewById(R.id.reg_btnReg);
+        this.tvLoginRedirect = findViewById(R.id.reg_tvLoginRedirect);
     }
 
     @Override
@@ -112,6 +114,16 @@ public class RegisterActivity extends AppCompatActivity {
                     i.putExtra(USERNAME_TAG, username);
                     startActivity(i);
                 }
+            }
+        });
+
+        // listener for redirect to Login screen
+        tvLoginRedirect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <Register activity>
+                Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(i);
             }
         });
 
