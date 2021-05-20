@@ -4,14 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.RestrictionsManager;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -24,7 +22,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,12 +44,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationMenu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 import com.mobdeve.yapr.iwiw.databinding.ActivityMapsBinding;
 
 import java.util.ArrayList;
@@ -92,7 +87,7 @@ public class MapsActivity extends AppCompatActivity
 
     // for RecyclerView component
     private ArrayList<String> strCategList;
-    RecyclerView rvCategList;
+    private RecyclerView rvCategList;
     private CategAdapter adapter;
 
     /**
@@ -238,8 +233,8 @@ public class MapsActivity extends AppCompatActivity
         // Get the components inside the popup window
         TextView tvAddress = restroomPopup.findViewById(R.id.tvAddress);
         TextView tvLocDistance = restroomPopup.findViewById(R.id.tvLocDistance);
-        TextView tvRatings = restroomPopup.findViewById(R.id.tvRatings);
-        TextView tvRateCount = restroomPopup.findViewById(R.id.tvRateCount);
+        TextView tvRatings = restroomPopup.findViewById(R.id.sr_tvRatings);
+        TextView tvRateCount = restroomPopup.findViewById(R.id.sr_tvRateCount);
 
         tvAddress.setText(closest.getName());
         tvLocDistance.setText(String.format("%.2f", dist) + " m");
@@ -251,39 +246,7 @@ public class MapsActivity extends AppCompatActivity
 
         strCategList = new ArrayList<>();
 
-        strCategList.add(closest.getCateg_paid());
-        strCategList.add(closest.getCateg_disability());
-        strCategList.add(closest.getCateg_bidet());
-        strCategList.add(closest.getCateg_loc_type());
-        strCategList.addAll(closest.getCateg_toiletries());
-
-        adapter = new CategAdapter(strCategList, this);
-        rvCategList.setAdapter(adapter);
-        rvCategList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-        // listener for navigate arrow btn in Popup window
-        this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
-        imvNavArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // navigate to <View Restroom Details activity>
-                Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
-
-                i.putExtra(MapsActivity.ADDRESS_TAG, closest.getName());
-                i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", dist));
-                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(closest.getRating()));
-
-                i.putExtra(MapsActivity.CATEG_PAID, closest.getCateg_paid());
-                i.putExtra(MapsActivity.CATEG_DISABILITY, closest.getCateg_disability());
-                i.putExtra(MapsActivity.CATEG_BIDET, closest.getCateg_bidet());
-                i.putExtra(MapsActivity.CATEG_LOCTYPE, closest.getCateg_loc_type());
-                i.putExtra(MapsActivity.CATEG_TOILETRIES, closest.getCateg_toiletries());
-//                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
-
-                startActivity(i);
-
-            }
-        });
+        setupPopup(closest, dist, restroomPopup);
 
         // Marker onClick Listener
         mMap.setOnMarkerClickListener(marker -> {
@@ -298,49 +261,53 @@ public class MapsActivity extends AppCompatActivity
             tvLocDistance.setText(String.format("%.2f", results[0]) + " m");
             tvRatings.setText(String.valueOf(restroom.getRating()));
 
-            // setting Adapter to populate the data into RecyclerView -> binding them to each other
-            this.rvCategList = restroomPopup.findViewById(R.id.rv_CategList);
-            strCategList = new ArrayList<>();
-
-            strCategList.add(restroom.getCateg_paid());
-            strCategList.add(restroom.getCateg_disability());
-            strCategList.add(restroom.getCateg_bidet());
-            strCategList.add(restroom.getCateg_loc_type());
-            strCategList.addAll(restroom.getCateg_toiletries());
-
-            adapter = new CategAdapter(strCategList, this);
-            rvCategList.setAdapter(adapter);
-            rvCategList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
-            // listener for navigate arrow btn in Popup window (to handle updated clicked markers)
-            this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
-            imvNavArrow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // navigate to <View Restroom Details activity>
-                    Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
-
-                    i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
-                    i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", results[0]));
-                    i.putExtra(MapsActivity.RATING_TAG, String.valueOf(restroom.getRating()));
-
-                    i.putExtra(MapsActivity.CATEG_PAID, restroom.getCateg_paid());
-                    i.putExtra(MapsActivity.CATEG_DISABILITY, restroom.getCateg_disability());
-                    i.putExtra(MapsActivity.CATEG_BIDET, restroom.getCateg_bidet());
-                    i.putExtra(MapsActivity.CATEG_LOCTYPE, restroom.getCateg_loc_type());
-                    i.putExtra(MapsActivity.CATEG_TOILETRIES, restroom.getCateg_toiletries());
-//                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
-                    // putExtra() for filters
-
-                    startActivity(i);
-                }
-            });
+            setupPopup(restroom, results[0], restroomPopup);
 
             return true;
         });
 
         enableMyLocation();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
+    }
+
+
+
+    private void setupPopup(Restroom restroom, float results, View restroomPopup) {
+        strCategList = new ArrayList<>();
+
+        strCategList.add(restroom.getCateg_paid());
+        strCategList.add(restroom.getCateg_disability());
+        strCategList.add(restroom.getCateg_bidet());
+        strCategList.add(restroom.getCateg_loc_type());
+        strCategList.addAll(restroom.getCateg_toiletries());
+
+        adapter = new CategAdapter(strCategList, this);
+        rvCategList.setAdapter(adapter);
+        rvCategList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+
+        // listener for navigate arrow btn in Popup window (to handle updated clicked markers)
+        this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
+        imvNavArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // navigate to <View Restroom Details activity>
+                Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
+
+                i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
+                i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", results));
+                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(restroom.getRating()));
+
+                i.putExtra(MapsActivity.CATEG_PAID, restroom.getCateg_paid());
+                i.putExtra(MapsActivity.CATEG_DISABILITY, restroom.getCateg_disability());
+                i.putExtra(MapsActivity.CATEG_BIDET, restroom.getCateg_bidet());
+                i.putExtra(MapsActivity.CATEG_LOCTYPE, restroom.getCateg_loc_type());
+                i.putExtra(MapsActivity.CATEG_TOILETRIES, restroom.getCateg_toiletries());
+//                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
+                // putExtra() for filters
+
+                startActivity(i);
+            }
+        });
     }
 
     // Convert vector to bitmap
