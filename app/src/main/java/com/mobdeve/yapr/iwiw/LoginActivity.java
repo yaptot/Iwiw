@@ -25,7 +25,6 @@ public class LoginActivity extends AppCompatActivity {
     // Firebase authentication
     private FirebaseAuth mAuth;
 
-
     // component declarations
     private EditText etEmail;
     private EditText etPass;
@@ -53,13 +52,14 @@ public class LoginActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
-        String strEmail = etEmail.getText().toString();
-        String strPass = etPass.getText().toString();
 
         // listener for Login btn
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String strEmail = etEmail.getText().toString();
+                String strPass = etPass.getText().toString();
 
                 Log.d(LOGIN_ACTIVITY, "TRACK: In btnLogin onclick");
                 Log.d(LOGIN_ACTIVITY, "EMAIL: " + strEmail);
@@ -99,6 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(LOGIN_ACTIVITY, "TRACK: In loginUser() onComplete()");
                         if (task.isSuccessful()) {
                             // pass this User for the needed Activity
                             FirebaseUser currUser = mAuth.getCurrentUser();
@@ -107,8 +108,7 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.d(LOGIN_ACTIVITY, "Logged in as: " + currUser.getEmail());
 
                                 // navigate to <Maps activity>
-                                Intent i = new Intent(LoginActivity.this, MapsActivity.class);
-                                startActivity(i);
+                                finish();
 
                                 // TODO: enable Map features for logged in user [ Rate, Review, Add Restroom ]
 

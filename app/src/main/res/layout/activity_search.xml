@@ -378,21 +378,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical"
-            tools:layout_editor_absoluteX="286dp">
-
-            <Button
-                android:id="@+id/test_btnReg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TEST REGISTER" />
-
-            <Button
-                android:id="@+id/test_btnLogin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TEST LOGIN" />
-
-        </LinearLayout>
+            tools:layout_editor_absoluteX="286dp"/>
     </LinearLayout>
 
     <Button

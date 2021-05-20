@@ -79,7 +79,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         // Creates a reference to the [ restrooms ] collection in Firebase
         CollectionReference restroomDB = db.collection("restrooms");
         // Query to be done within the collection
-        Query searchRestrooms = restroomDB.orderBy("name").startAt(strKey).endAt(strKey + "\\uf8ff"); // --what is this unicode?
+        Query searchRestrooms = restroomDB.orderBy("name").startAt(strKey).endAt(strKey + "\uf8ff"); // --what is this unicode?
 
         searchRestrooms.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

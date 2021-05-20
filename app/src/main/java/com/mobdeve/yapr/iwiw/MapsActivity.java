@@ -4,10 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -46,10 +49,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.mobdeve.yapr.iwiw.databinding.ActivityMapsBinding;
 
 import java.util.ArrayList;
 
@@ -71,15 +75,16 @@ public class MapsActivity extends AppCompatActivity
 
     // component declarations
     private ImageView imvNavArrow;
-    private BottomNavigationView navBar;
-    private ImageView btnSearch;
+    public DrawerLayout drawerLayout;
+    private PopupWindow popupWindow;
 
     // var declarations
     private GoogleMap mMap; //Map
-    private ActivityMapsBinding binding;
     private FirebaseFirestore db = FirebaseFirestore.getInstance(); // Database Instance
     private FusedLocationProviderClient fusedLocationClient; // Location Services
     private LocationCallback locationCallback;
+    private FirebaseAuth mAuth; // Firebase authentication
+    private FirebaseUser currUser; // Current user logged in (if any)
 
     private ArrayList<Restroom> restrooms = new ArrayList<>(); // Restrooms available
     public static Location currentLocation; // Current Location
@@ -100,25 +105,15 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
 
-        binding = ActivityMapsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        drawerLayout = findViewById(R.id.drawerLayout);
+
 
         // Instantiate Location Services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         getLastLoc();
-        navBar = findViewById(R.id.mapNav);
-        navBar.setSelectedItemId(R.id.mapIc);
-
-        btnSearch = findViewById(R.id.btnSearch);
-        btnSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MapsActivity.this, SearchActivity.class);
-                startActivity(i);
-            }
-        });
 
         // Instantiate Callback Function for location updates
         locationCallback = new LocationCallback() {
@@ -134,8 +129,11 @@ public class MapsActivity extends AppCompatActivity
         };
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragmentContainer, mapFragment)
+                .commit();
 
         // Get all restrooms from Firestore
         db.collection("restrooms").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -227,9 +225,9 @@ public class MapsActivity extends AppCompatActivity
         int width = size.x;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
 
-        final PopupWindow popupWindow = new PopupWindow(restroomPopup, width - 100, height);
+        popupWindow = new PopupWindow(restroomPopup, width - 100, height);
 
-        popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 300);
+        popupWindow.showAtLocation(findViewById(R.id.constraintMain), Gravity.BOTTOM, 0, 300);
 
         // Get the components inside the popup window
         TextView tvAddress = restroomPopup.findViewById(R.id.tvAddress);
@@ -347,6 +345,26 @@ public class MapsActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        // get Firebase instance
+        mAuth = FirebaseAuth.getInstance();
+        // get current user
+        currUser = mAuth.getCurrentUser();
+        if(currUser != null) {
+            findViewById(R.id.ll_login).setVisibility(View.GONE);
+            findViewById(R.id.ll_logout).setVisibility(View.VISIBLE);
+        }
+        else {
+            findViewById(R.id.ll_logout).setVisibility(View.GONE);
+            findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
+        }
+
+
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         startLocationUpdates();
@@ -368,6 +386,57 @@ public class MapsActivity extends AppCompatActivity
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
+    public void clickMenu(View view) {
+        // Open drawer
+        openDrawer(drawerLayout);
+    }
+
+    public static void openDrawer(DrawerLayout drawerLayout) {
+        // Open drawer layout
+        drawerLayout.openDrawer(GravityCompat.START);
+    }
+
+    public void clickSearch(View view) {
+        Intent i = new Intent(MapsActivity.this, SearchActivity.class);
+        startActivity(i);
+    }
+
+    public void clickLogo(View view) {
+        // Close Drawer
+        closeDrawer(drawerLayout);
+    }
+
+    public static void closeDrawer(DrawerLayout drawerLayout) {
+        // Close drawer layout
+        // Check condition
+        if(drawerLayout.isDrawerOpen(GravityCompat.START))
+            drawerLayout.closeDrawer(GravityCompat.START);
+    }
+
+    public void clickMap(View view) {
+        // Recreate activity
+
+    }
+
+    public void clickLogin(View view) {
+        redirectActivity();
+    }
+
+    private void redirectActivity() {
+        redirectActivity(this, LoginActivity.class);
+    }
+
+    public static void redirectActivity(Activity activity, Class aClass) {
+        // Initialize intent
+        Intent i = new Intent(activity, aClass);
+        activity.startActivity(i);
+    }
+
+    public void clickLogout(View view) {
+        FirebaseAuth.getInstance().signOut();
+        findViewById(R.id.ll_logout).setVisibility(View.GONE);
+        findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
+    }
 
 
 }
