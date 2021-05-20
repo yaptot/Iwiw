@@ -40,6 +40,17 @@
             android:textSize="14sp" />
 
         <EditText
+            android:id="@+id/reg_etUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ems="10"
+            android:fontFamily="@font/varela_round"
+            android:hint="Username"
+            android:inputType="textPersonName"
+            android:textSize="14sp" />
+
+        <EditText
             android:id="@+id/reg_etPass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

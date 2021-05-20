@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 public class SearchActivity extends AppCompatActivity {
     // TAG declarations
-    public static final String SEARCH_ACTIVITY = "Search Activity";
+    public static final String SEARCH_ACTIVITY = "SearchActivity";
     public static final String QUERY_TAG = "Search Keyword";
     public static final String IS_KEYWORD = "Keyword or Category Filter";
     public static final String CATEG_ID = "Category ID";
