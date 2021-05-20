@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -16,16 +17,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Iwiw"
+        android:fontFamily="@font/varela_round"
+        android:textColor="#49c6e5"
         android:textSize="20sp"
         android:textStyle="bold"
         android:textAlignment="center" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="3dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:background="#fffbfa" />
+        android:background="#49c6e5" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,13 +43,16 @@
             android:layout_weight="1"
             android:text="Map"
             android:padding="12dp"
+            android:textColor="#49c6e5"
+            android:fontFamily="@font/varela_round"
             android:layout_marginStart="16dp" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="48dp"
-            android:src="@drawable/ic_baseline_map_24" />
+            android:src="@drawable/ic_baseline_map_24"
+            app:tint="#49c6e5" />
 
     </LinearLayout>
 
@@ -63,13 +69,15 @@
             android:layout_weight="1"
             android:text="Login"
             android:padding="12dp"
-            android:layout_marginStart="16dp" />
+            android:layout_marginStart="16dp"
+            android:textColor="#49c6e5"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="48dp"
-            android:src="@drawable/ic_baseline_login_24" />
+            android:src="@drawable/ic_baseline_login_24"
+            app:tint="#49c6e5" />
 
     </LinearLayout>
 

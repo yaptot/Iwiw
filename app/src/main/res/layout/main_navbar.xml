@@ -4,19 +4,21 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:padding="12dp"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:background="#fffbfa">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="clickMenu"
-        android:src="@drawable/ic_baseline_menu_24" />
+        android:src="@drawable/ic_baseline_menu_24"
+        android:tint="#49c6e5"/>
 
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <ImageView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_weight="1"
-        android:text="hehe"
-        android:textSize="20sp" />
+        android:src="@drawable/logo_lined"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>
