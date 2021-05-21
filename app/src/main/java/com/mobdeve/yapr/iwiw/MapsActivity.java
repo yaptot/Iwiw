@@ -54,6 +54,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -72,6 +73,7 @@ public class MapsActivity extends AppCompatActivity
     public static final String CATEG_DISABILITY = "Disability access";
     public static final String CATEG_BIDET = "Bidet access";
     public static final String CATEG_TOILETRIES = "Toiletries";
+    public static final String REVIEWS_ARRAY = "Reviews";
 
     // component declarations
     private ImageView imvNavArrow;
@@ -85,6 +87,7 @@ public class MapsActivity extends AppCompatActivity
     private LocationCallback locationCallback;
     private FirebaseAuth mAuth; // Firebase authentication
     private FirebaseUser currUser; // Current user logged in (if any)
+    private Gson gson = new Gson(); // Gson
 
     private ArrayList<Restroom> restrooms = new ArrayList<>(); // Restrooms available
     public static Location currentLocation; // Current Location
@@ -125,33 +128,34 @@ public class MapsActivity extends AppCompatActivity
                 for (Location location : locationResult.getLocations()) {
                     currentLocation = location;
                 }
+                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.fragmentContainer, mapFragment)
+                        .commit();
+
+                // Get all restrooms from Firestore
+                db.collection("restrooms").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    // When the query is complete
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        // If there are results
+                        if (task.isSuccessful()) {
+                            // Add each restroom to the restrooms ArrayList
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                restrooms.add(document.toObject(Restroom.class));
+                            }
+
+                            callMap(mapFragment);
+                        } else
+                            Log.d("query", "NO RESTROOMS");
+                    }
+                });
             }
         };
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragmentContainer, mapFragment)
-                .commit();
 
-        // Get all restrooms from Firestore
-        db.collection("restrooms").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            // When the query is complete
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                // If there are results
-                if (task.isSuccessful()) {
-                    // Add each restroom to the restrooms ArrayList
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        restrooms.add(document.toObject(Restroom.class));
-                    }
-
-                    callMap(mapFragment);
-                } else
-                    Log.d("query", "NO RESTROOMS");
-            }
-        });
     }
 
     // Gets the last location of the user
@@ -287,8 +291,6 @@ public class MapsActivity extends AppCompatActivity
         return total / reviews.size();
     }
 
-
-
     private void setupPopup(Restroom restroom, float results, View restroomPopup) {
         strCategList = new ArrayList<>();
 
@@ -310,6 +312,12 @@ public class MapsActivity extends AppCompatActivity
                 // navigate to <View Restroom Details activity>
                 Intent i = new Intent(MapsActivity.this, ViewRestRmActivity.class);
 
+                ArrayList<String> strReviews = new ArrayList<>();
+
+                for(Review review : restroom.getReviews()) {
+                    strReviews.add(gson.toJson(review));
+                }
+
                 i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
                 i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", results));
                 i.putExtra(MapsActivity.RATING_TAG, String.valueOf(computeAverage(restroom.getReviews())));
@@ -317,10 +325,9 @@ public class MapsActivity extends AppCompatActivity
                 i.putExtra(MapsActivity.CATEG_PAID, restroom.getCateg_paid());
                 i.putExtra(MapsActivity.CATEG_DISABILITY, restroom.getCateg_disability());
                 i.putExtra(MapsActivity.CATEG_BIDET, restroom.getCateg_bidet());
+                i.putExtra(MapsActivity.REVIEWS_ARRAY, strReviews);
                 i.putExtra(MapsActivity.CATEG_LOCTYPE, restroom.getCateg_loc_type());
                 i.putExtra(MapsActivity.CATEG_TOILETRIES, restroom.getCateg_toiletries());
-//                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
-                // putExtra() for filters
 
                 startActivity(i);
             }
@@ -365,6 +372,7 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        startLocationUpdates();
 
         // get Firebase instance
         mAuth = FirebaseAuth.getInstance();
@@ -389,7 +397,12 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        startLocationUpdates();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        popupWindow.dismiss();
     }
 
     @Override
