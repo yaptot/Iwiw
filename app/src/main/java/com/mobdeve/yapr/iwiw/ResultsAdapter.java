@@ -75,8 +75,23 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder> {
 
         holder.sr_tvAddress.setText(restroom.getRestroom().getName());
         holder.sr_tvLocDistance.setText(String.format("%.2f", restroom.getDistance()) + " m");
-        holder.sr_tvRatings.setText(String.valueOf(restroom.getRestroom().getRating()));
+        //holder.sr_tvRatings.setText(String.valueOf(restroom.getRestroom().getRating()));
 
+        double ave = 0;
+        int total = 0;
+
+        ArrayList<Review> reviews = restroom.getRestroom().getReviews();
+
+        for(Review review : reviews) {
+            total += review.getRating();
+        }
+
+        ave = total / reviews.size();
+
+        holder.sr_tvRatings.setText(String.format("%.2f", ave));
+        holder.sr_tvRateCount.setText("(" + reviews.size() + " ratings)");
+
+        double finalAve = ave;
         holder.sr_imvArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,8 +100,8 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder> {
 
                 i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getRestroom().getName());
                 i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", restroom.getDistance()));
-                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(restroom.getRestroom().getRating()));
-
+                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(finalAve));
+                i.putExtra(MapsActivity.RATE_COUNT_TAG, String.valueOf(reviews.size()));
                 i.putExtra(MapsActivity.CATEG_PAID, restroom.getRestroom().getCateg_paid());
                 i.putExtra(MapsActivity.CATEG_DISABILITY, restroom.getRestroom().getCateg_disability());
                 i.putExtra(MapsActivity.CATEG_BIDET, restroom.getRestroom().getCateg_bidet());

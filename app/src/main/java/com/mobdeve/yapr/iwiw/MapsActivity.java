@@ -237,8 +237,14 @@ public class MapsActivity extends AppCompatActivity
 
         tvAddress.setText(closest.getName());
         tvLocDistance.setText(String.format("%.2f", dist) + " m");
-        tvRatings.setText(String.valueOf(closest.getRating()));
-        // TODO : how to count users -- tvRateCount.setText();
+
+
+        ArrayList<Review> reviews = closest.getReviews();
+
+        tvRateCount.setText("(" + reviews.size() + " ratings)");
+
+
+        tvRatings.setText(String.format("%.2f", computeAverage(reviews)));
 
         // setting Adapter to populate the data into RecyclerView -> binding them to each other
         this.rvCategList = restroomPopup.findViewById(R.id.rv_CategList);
@@ -253,13 +259,15 @@ public class MapsActivity extends AppCompatActivity
 
             Log.d("info", restroom.getName());
 
+            ArrayList<Review> markerReviews = restroom.getReviews();
+
             float[] results = new float[1]; // -- distance in (meters)
             Location.distanceBetween(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0), currentLocation.getLatitude(), currentLocation.getLongitude(), results);
 
             tvAddress.setText(restroom.getName());
             tvLocDistance.setText(String.format("%.2f", results[0]) + " m");
-            tvRatings.setText(String.valueOf(restroom.getRating()));
 
+            tvRatings.setText(String.format("%.2f", computeAverage(markerReviews)));
             setupPopup(restroom, results[0], restroomPopup);
 
             return true;
@@ -267,6 +275,16 @@ public class MapsActivity extends AppCompatActivity
 
         enableMyLocation();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
+    }
+
+    private double computeAverage(ArrayList<Review> reviews) {
+        int total = 0;
+
+        for(Review review : reviews) {
+            total += review.getRating();
+        }
+
+        return total / reviews.size();
     }
 
 
@@ -294,8 +312,8 @@ public class MapsActivity extends AppCompatActivity
 
                 i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
                 i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", results));
-                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(restroom.getRating()));
-
+                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(computeAverage(restroom.getReviews())));
+                i.putExtra(MapsActivity.RATE_COUNT_TAG, String.valueOf(restroom.getReviews().size()));
                 i.putExtra(MapsActivity.CATEG_PAID, restroom.getCateg_paid());
                 i.putExtra(MapsActivity.CATEG_DISABILITY, restroom.getCateg_disability());
                 i.putExtra(MapsActivity.CATEG_BIDET, restroom.getCateg_bidet());
