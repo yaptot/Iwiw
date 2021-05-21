@@ -6,13 +6,13 @@ import java.util.ArrayList;
 public class Restroom {
     private ArrayList<Double> coordinates;
     private String name;
-    private double rating;
 
     private String categ_disability;
     private String categ_loc_type;
     private String categ_paid;
     private String categ_bidet;
     private ArrayList<String> categ_toiletries;
+    private ArrayList<Review> reviews;
 
     public ArrayList<Double> getCoordinates() {
         return coordinates;
@@ -22,8 +22,8 @@ public class Restroom {
         return name;
     }
 
-    public double getRating() {
-        return rating;
+    public ArrayList<Review> getReviews() {
+        return reviews;
     }
 
     public String getCateg_disability() {

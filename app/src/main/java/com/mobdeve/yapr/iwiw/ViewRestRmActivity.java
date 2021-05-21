@@ -63,8 +63,7 @@ public class ViewRestRmActivity extends AppCompatActivity {
         String crDist = gi.getStringExtra(MapsActivity.DISTANCE_TAG);
         String crRating = gi.getStringExtra(MapsActivity.RATING_TAG);
 
-        // TODO: Number of Ratings
-//        String crRateCount = gi.getStringExtra(MapsActivity.RATE_COUNT_TAG);
+        String crRateCount = gi.getStringExtra(MapsActivity.RATE_COUNT_TAG);
 
         String crPaid = gi.getStringExtra(MapsActivity.CATEG_PAID);
         String crDisability = gi.getStringExtra(MapsActivity.CATEG_DISABILITY);
@@ -77,7 +76,7 @@ public class ViewRestRmActivity extends AppCompatActivity {
 
         setRating(crRating);
         tvRatings.setText(crRating);
-        tvRateCount.setText("0");
+        tvRateCount.setText("(" + crRateCount + " ratings)");
 
         if(crPaid.equalsIgnoreCase("Paid"))
             imvPaid.setImageResource(R.drawable.ic_dollar_sign);
