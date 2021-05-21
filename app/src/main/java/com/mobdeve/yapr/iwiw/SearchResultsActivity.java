@@ -158,7 +158,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     public void computeLocDist (Restroom restroom) {
         float[] results = new float[1]; // --distance in meters
-        Location.distanceBetween(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0), MapsActivity.currentLocation.getLatitude(), MapsActivity.currentLocation.getLongitude(), results);
+        Location.distanceBetween(restroom.getLatitude(), restroom.getLongitude(), MapsActivity.currentLocation.getLatitude(), MapsActivity.currentLocation.getLongitude(), results);
 
         RestroomDist restroomDist = new RestroomDist(results[0], restroom);
         restroomDistArray.add(restroomDist);

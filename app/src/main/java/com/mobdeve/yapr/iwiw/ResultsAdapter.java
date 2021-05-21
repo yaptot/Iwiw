@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 
 import org.w3c.dom.Text;
@@ -77,10 +78,13 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder> {
         holder.sr_tvLocDistance.setText(String.format("%.2f", restroom.getDistance()) + " m");
         //holder.sr_tvRatings.setText(String.valueOf(restroom.getRestroom().getRating()));
 
+        Gson gson = new Gson();
+
         double ave = 0;
         int total = 0;
 
         ArrayList<Review> reviews = restroom.getRestroom().getReviews();
+        ArrayList<String> strReviews = new ArrayList<>();
 
         for(Review review : reviews) {
             total += review.getRating();
@@ -88,7 +92,7 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder> {
 
         ave = total / reviews.size();
 
-        holder.sr_tvRatings.setText(String.format("%.2f", ave));
+        holder.sr_tvRatings.setText(String.format("%.1f", ave));
         holder.sr_tvRateCount.setText("(" + reviews.size() + " ratings)");
 
         double finalAve = ave;
@@ -98,6 +102,7 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder> {
                 // navigate to <View Restroom Details activity>
                 Intent i = new Intent(v.getContext(), ViewRestRmActivity.class);
 
+                // TODO get id of document
                 i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getRestroom().getName());
                 i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", restroom.getDistance()));
                 i.putExtra(MapsActivity.RATING_TAG, String.valueOf(finalAve));
@@ -107,6 +112,17 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder> {
                 i.putExtra(MapsActivity.CATEG_BIDET, restroom.getRestroom().getCateg_bidet());
                 i.putExtra(MapsActivity.CATEG_LOCTYPE, restroom.getRestroom().getCateg_loc_type());
                 i.putExtra(MapsActivity.CATEG_TOILETRIES, restroom.getRestroom().getCateg_toiletries());
+                i.putExtra(MapsActivity.LATITUDE_TAG, restroom.getRestroom().getLatitude());
+                i.putExtra(MapsActivity.LONGITUDE_TAG, restroom.getRestroom().getLongitude());
+
+                strReviews.clear();
+
+                for(Review review : reviews) {
+                    strReviews.add(gson.toJson(review));
+                }
+
+                i.putExtra(MapsActivity.REVIEWS_ARRAY, strReviews);
+
 //                i.putExtra(MapsActivity.RATE_COUNT_TAG, );
                 // putExtra() for filters
 
