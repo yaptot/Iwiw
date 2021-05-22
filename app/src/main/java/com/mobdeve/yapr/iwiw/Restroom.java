@@ -4,7 +4,8 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Restroom {
-    private ArrayList<Double> coordinates;
+    private double latitude;
+    private double longitude;
     private String name;
 
     private String categ_disability;
@@ -14,8 +15,12 @@ public class Restroom {
     private ArrayList<String> categ_toiletries;
     private ArrayList<Review> reviews;
 
-    public ArrayList<Double> getCoordinates() {
-        return coordinates;
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 
     public String getName() {

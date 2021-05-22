@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="45dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/shape_details"
                 android:orientation="vertical">
@@ -238,7 +238,7 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:id="@+id/ll_reviews"
+                android:id="@+id/ll_rateRestroom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
@@ -247,7 +247,7 @@
                 android:background="@drawable/shape_details">
 
                 <ImageView
-                    android:id="@+id/view_star1"
+                    android:id="@+id/rate_star1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -257,7 +257,7 @@
                     app:srcCompat="@drawable/ic_icon_star" />
 
                 <ImageView
-                    android:id="@+id/view_star2"
+                    android:id="@+id/rate_star2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -267,7 +267,7 @@
                     app:srcCompat="@drawable/ic_icon_star" />
 
                 <ImageView
-                    android:id="@+id/view_star3"
+                    android:id="@+id/rate_star3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -277,7 +277,7 @@
                     app:srcCompat="@drawable/ic_star_grey" />
 
                 <ImageView
-                    android:id="@+id/view_star4"
+                    android:id="@+id/rate_star4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -287,7 +287,7 @@
                     app:srcCompat="@drawable/ic_star_grey" />
 
                 <ImageView
-                    android:id="@+id/view_star5"
+                    android:id="@+id/rate_star5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -337,7 +337,21 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="15dp"
-                android:orientation="vertical" />
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnAddReview"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:backgroundTint="#0AE0BC"
+                android:fontFamily="@font/varela_round"
+                android:text="ADD REVIEW"
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>

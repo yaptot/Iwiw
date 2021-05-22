@@ -27,7 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Firebase authentication
     private FirebaseAuth mAuth;
-    FirebaseUser currUser;
+    private FirebaseUser currUser;
 
     // component declarations
     private EditText etEmail;

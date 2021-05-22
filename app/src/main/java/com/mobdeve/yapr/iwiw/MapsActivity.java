@@ -74,6 +74,8 @@ public class MapsActivity extends AppCompatActivity
     public static final String CATEG_BIDET = "Bidet access";
     public static final String CATEG_TOILETRIES = "Toiletries";
     public static final String REVIEWS_ARRAY = "Reviews";
+    public static final String LATITUDE_TAG = "Latitude";
+    public static final String LONGITUDE_TAG = "Longitude";
 
     // component declarations
     private ImageView imvNavArrow;
@@ -110,13 +112,21 @@ public class MapsActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+        } else {
+            init();
+            startLocationUpdates();
+        }
+
+    }
+
+    public void init() {
         drawerLayout = findViewById(R.id.drawerLayout);
 
 
         // Instantiate Location Services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-
-        getLastLoc();
 
         // Instantiate Callback Function for location updates
         locationCallback = new LocationCallback() {
@@ -154,28 +164,6 @@ public class MapsActivity extends AppCompatActivity
                 });
             }
         };
-
-
-    }
-
-    // Gets the last location of the user
-    public void getLastLoc() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
-            return;
-        }
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        currentLocation = location;
-                        if (location != null) {
-                            // Logic to handle location object
-                            Log.d("null location", "Location is null");
-                        }
-                    }
-                });
     }
 
     private void callMap(SupportMapFragment mapFragment) {
@@ -200,11 +188,11 @@ public class MapsActivity extends AppCompatActivity
 
 
         for (Restroom restroom : restrooms) {
-            LatLng point = new LatLng(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0));
+            LatLng point = new LatLng(restroom.getLatitude(), restroom.getLongitude());
 
             // Computes the distance of the restroom to the user
             float[] results = new float[1];
-            Location.distanceBetween(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0), currentLocation.getLatitude(), currentLocation.getLongitude(), results);
+            Location.distanceBetween(restroom.getLatitude(), restroom.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), results);
             if (dist == 0 || results[0] < dist) {
                 dist = results[0];
                 closest = restroom;
@@ -248,7 +236,7 @@ public class MapsActivity extends AppCompatActivity
         tvRateCount.setText("(" + reviews.size() + " ratings)");
 
 
-        tvRatings.setText(String.format("%.2f", computeAverage(reviews)));
+        tvRatings.setText(String.format("%.1f", computeAverage(reviews)));
 
         // setting Adapter to populate the data into RecyclerView -> binding them to each other
         this.rvCategList = restroomPopup.findViewById(R.id.rv_CategList);
@@ -266,12 +254,12 @@ public class MapsActivity extends AppCompatActivity
             ArrayList<Review> markerReviews = restroom.getReviews();
 
             float[] results = new float[1]; // -- distance in (meters)
-            Location.distanceBetween(restroom.getCoordinates().get(1), restroom.getCoordinates().get(0), currentLocation.getLatitude(), currentLocation.getLongitude(), results);
+            Location.distanceBetween(restroom.getLatitude(), restroom.getLongitude(), currentLocation.getLatitude(), currentLocation.getLongitude(), results);
 
             tvAddress.setText(restroom.getName());
             tvLocDistance.setText(String.format("%.2f", results[0]) + " m");
 
-            tvRatings.setText(String.format("%.2f", computeAverage(markerReviews)));
+            tvRatings.setText(String.format("%.1f", computeAverage(markerReviews)));
             setupPopup(restroom, results[0], restroomPopup);
 
             return true;
@@ -318,6 +306,7 @@ public class MapsActivity extends AppCompatActivity
                     strReviews.add(gson.toJson(review));
                 }
 
+                // TODO get id of document
                 i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
                 i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", results));
                 i.putExtra(MapsActivity.RATING_TAG, String.valueOf(computeAverage(restroom.getReviews())));
@@ -328,6 +317,8 @@ public class MapsActivity extends AppCompatActivity
                 i.putExtra(MapsActivity.REVIEWS_ARRAY, strReviews);
                 i.putExtra(MapsActivity.CATEG_LOCTYPE, restroom.getCateg_loc_type());
                 i.putExtra(MapsActivity.CATEG_TOILETRIES, restroom.getCateg_toiletries());
+                i.putExtra(MapsActivity.LATITUDE_TAG, restroom.getLatitude());
+                i.putExtra(MapsActivity.LONGITUDE_TAG, restroom.getLongitude());
 
                 startActivity(i);
             }
@@ -372,7 +363,6 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        startLocationUpdates();
 
         // get Firebase instance
         mAuth = FirebaseAuth.getInstance();
@@ -382,7 +372,7 @@ public class MapsActivity extends AppCompatActivity
             findViewById(R.id.ll_login).setVisibility(View.GONE);
             findViewById(R.id.ll_logout).setVisibility(View.VISIBLE);
             TextView tv = findViewById(R.id.tvNavTitle);
-            tv.setText(currUser.getDisplayName());
+            tv.setText("Hi, " + currUser.getDisplayName() + "!");
         }
         else {
             findViewById(R.id.ll_logout).setVisibility(View.GONE);
@@ -402,12 +392,12 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        popupWindow.dismiss();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        popupWindow.dismiss();
 
     }
 

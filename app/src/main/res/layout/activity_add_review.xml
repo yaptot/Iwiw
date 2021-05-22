@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F3F1F1"
+    android:orientation="vertical"
+    android:paddingStart="20dp"
+    android:paddingTop="90dp"
+    android:paddingEnd="20dp"
+    tools:context=".AddReviewActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/varela_round"
+        android:text="How was this restroom?"
+        android:textColor="#1d1d1d"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/rate_tvReviewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/varela_round"
+        android:text="Rating"
+        android:textColor="#1D1D1D"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_rateRestroom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/shape_details"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/rate_tvReviewTitle"
+        tools:layout_editor_absoluteX="16dp">
+
+        <ImageView
+            android:id="@+id/rate_star1"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/ic_icon_star" />
+
+        <ImageView
+            android:id="@+id/rate_star2"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/ic_icon_star" />
+
+        <ImageView
+            android:id="@+id/rate_star3"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/ic_star_grey" />
+
+        <ImageView
+            android:id="@+id/rate_star4"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/ic_star_grey" />
+
+        <ImageView
+            android:id="@+id/rate_star5"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/ic_star_grey" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/rate_tvTextReviewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:fontFamily="@font/varela_round"
+        android:text="Write a review"
+        android:textColor="#1D1D1D"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/ll_rateRestroom"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <LinearLayout
+        android:id="@+id/ll_addTextReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/shape_details"
+
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/rate_tvTextReviewTitle"
+        tools:layout_editor_absoluteX="16dp">
+
+
+        <EditText
+            android:id="@+id/etReviewText"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ems="10"
+            android:fontFamily="@font/varela_round"
+            android:gravity="start|top"
+            android:hint="(Optional)"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:maxLength="250" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnPushReview"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:backgroundTint="#0AE0BC"
+        android:fontFamily="@font/varela_round"
+        android:text="ADD REVIEW"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_addTextReview" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

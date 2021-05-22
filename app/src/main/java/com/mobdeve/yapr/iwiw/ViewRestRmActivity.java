@@ -1,5 +1,6 @@
 package com.mobdeve.yapr.iwiw;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -8,17 +9,27 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 public class ViewRestRmActivity extends AppCompatActivity {
     // TAG declarations
+    public static String ID_TAG = "DocumentId";
 
     // Gson declaration
     private Gson gson = new Gson();
@@ -44,13 +55,22 @@ public class ViewRestRmActivity extends AppCompatActivity {
 
     private LinearLayout ll_viewReviews;
 
+    private Button btnAddReview;
+
     // var declarations
+    private FirebaseAuth mAuth; // Firebase authentication
+    private FirebaseUser currUser; // Current user logged in (if any)
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private String id;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewrestrm);
+
+        mAuth = FirebaseAuth.getInstance();
+        currUser = mAuth.getCurrentUser();
 
         this.tvAddress = findViewById(R.id.view_tvAddress);
         this.tvLocDistance = findViewById(R.id.view_tvLocDistance);
@@ -64,13 +84,15 @@ public class ViewRestRmActivity extends AppCompatActivity {
         this.tvLocType = findViewById(R.id.view_tvLocType);
         this.tvToiletries = findViewById(R.id.view_tvToiletries);
 
-        this.imvStar1 = findViewById(R.id.view_star1);
-        this.imvStar2 = findViewById(R.id.view_star2);
-        this.imvStar3 = findViewById(R.id.view_star3);
-        this.imvStar4 = findViewById(R.id.view_star4);
-        this.imvStar5 = findViewById(R.id.view_star5);
+        this.imvStar1 = findViewById(R.id.rate_star1);
+        this.imvStar2 = findViewById(R.id.rate_star2);
+        this.imvStar3 = findViewById(R.id.rate_star3);
+        this.imvStar4 = findViewById(R.id.rate_star4);
+        this.imvStar5 = findViewById(R.id.rate_star5);
 
         this.ll_viewReviews = findViewById(R.id.ll_viewReviews);
+
+        this.btnAddReview = findViewById(R.id.btnAddReview);
 
         Intent gi = getIntent();
         // retrieve restroom details and set components
@@ -87,6 +109,9 @@ public class ViewRestRmActivity extends AppCompatActivity {
         ArrayList<String> crToiletries = gi.getStringArrayListExtra(MapsActivity.CATEG_TOILETRIES);
         ArrayList<String> strReviews = gi.getStringArrayListExtra(MapsActivity.REVIEWS_ARRAY);
         ArrayList<Review> reviews = new ArrayList<>();
+
+        double crLatitude = gi.getDoubleExtra(MapsActivity.LATITUDE_TAG, 0);
+        double crLongitude = gi.getDoubleExtra(MapsActivity.LONGITUDE_TAG, 0);
 
         Log.d("DATA", "DATA: " + strReviews.toString());
 
@@ -128,6 +153,31 @@ public class ViewRestRmActivity extends AppCompatActivity {
         }
 
         showReviews(reviews);
+
+        db.collection("restrooms").whereEqualTo("latitude", crLatitude).whereEqualTo("longitude", crLongitude).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    id = task.getResult().getDocuments().get(0).getId();
+                    Log.d("DATA", "RESTROOM ID: " + id);
+                } else {
+                    Log.d("DATA", "DATA: Restroom ID not found");
+                }
+            }
+        });
+
+        if(currUser != null) {
+            btnAddReview.setVisibility(View.VISIBLE);
+            btnAddReview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(ViewRestRmActivity.this, AddReviewActivity.class);
+                    i.putExtra(ViewRestRmActivity.ID_TAG, id);
+
+                    startActivity(i);
+                }
+            });
+        }
 
     }
 
