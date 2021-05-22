@@ -62,7 +62,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/ic_icon_star" />
+            app:srcCompat="@drawable/ic_star_grey" />
 
         <ImageView
             android:id="@+id/rate_star3"
