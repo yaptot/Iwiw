@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 public class SearchActivity extends AppCompatActivity {
     // TAG declarations
     public static final String SEARCH_ACTIVITY = "SearchActivity";
@@ -18,7 +20,7 @@ public class SearchActivity extends AppCompatActivity {
     public static final String CATEG_ID = "Category ID";
 
     // component declarations
-    private Button btnSearch;
+    private TextInputLayout layoutEtSearch;
     private EditText etSearch;
     private LinearLayout ll_categFree;
     private LinearLayout ll_categPaid;
@@ -47,8 +49,8 @@ public class SearchActivity extends AppCompatActivity {
 
         initComponents();
 
-        // listener for Search btn
-        btnSearch.setOnClickListener(new View.OnClickListener() {
+        // listener for Search icon
+        layoutEtSearch.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String strSearch = etSearch.getText().toString();
@@ -60,6 +62,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
+        // listener for pressing the "enter" key
         etSearch.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
@@ -237,7 +240,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void initComponents() {
-        this.btnSearch = findViewById(R.id.search_btnSearch);
+        this.layoutEtSearch = findViewById(R.id.layoutEtSearch);
         this.etSearch = findViewById(R.id.etSearch);
         this.ll_categFree = findViewById(R.id.ll_categFree);
         this.ll_categPaid = findViewById(R.id.ll_categPaid);

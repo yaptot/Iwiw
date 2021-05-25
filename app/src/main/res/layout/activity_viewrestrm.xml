@@ -57,7 +57,7 @@
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_filter1"
+                android:id="@+id/add_filter1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp">
@@ -316,7 +316,8 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:fontFamily="@font/varela_round"
-                    android:text="(3 ratings)" />
+                    android:text="(3 ratings)"
+                    android:textColor="#666666" />
             </LinearLayout>
 
             <TextView

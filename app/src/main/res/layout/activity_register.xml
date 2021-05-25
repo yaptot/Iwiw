@@ -27,52 +27,85 @@
             android:layout_gravity="center"
             app:srcCompat="@drawable/logo_lined" />
 
-        <EditText
-            android:id="@+id/reg_etEmail"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:ems="10"
-            android:fontFamily="@font/varela_round"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:textColor="#01120F"
-            android:textSize="14sp" />
+            android:layout_marginTop="20dp">
 
-        <EditText
-            android:id="@+id/reg_etUsername"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:fontFamily="@font/varela_round"
-            android:hint="Username"
-            android:inputType="textPersonName"
-            android:textSize="14sp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:fontFamily="@font/varela_round"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:textColor="#1d1d1d"
+                android:textSize="14sp" />
 
-        <EditText
-            android:id="@+id/reg_etPass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:fontFamily="@font/varela_round"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:textColor="#01120F"
-            android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/reg_etConfirmPass"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ems="10"
-            android:fontFamily="@font/varela_round"
-            android:hint="Confirm Password"
-            android:inputType="textPassword"
-            android:textColor="#01120F"
-            android:textSize="14sp" />
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_etUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:fontFamily="@font/varela_round"
+                android:hint="Username"
+                android:inputType="textPersonName"
+                android:textColor="#1d1d1d"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_etPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:fontFamily="@font/varela_round"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="#1d1d1d"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/reg_etConfirmPass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:ems="10"
+                android:fontFamily="@font/varela_round"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:textColor="#1d1d1d"
+                android:textSize="14sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/reg_btnReg"
