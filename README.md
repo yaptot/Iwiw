@@ -5,6 +5,7 @@ A mobile application for finding restrooms.
 - [Firebase](https://firebase.google.com/)
 - [Google Maps](https://developers.google.com/maps)
 - [Google Play Services](https://developers.google.com/android/guides/overview)
+- [Material Design](https://material.io/)
 
 ## Authors
 - MANZANO, Ninna Robyn M.
