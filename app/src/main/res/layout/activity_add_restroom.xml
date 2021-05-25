@@ -43,30 +43,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <EditText
-        android:id="@+id/etRestroomName"
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:id="@+id/tilRestroomName"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/shape_details"
-        android:ems="10"
-        android:fontFamily="@font/varela_round"
-        android:hint="Name"
-        android:inputType="textPersonName"
-        android:paddingStart="15dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:textColorHint="#49c6e5"
-        android:textSize="14sp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addrestrm_tvName" />
+        app:layout_constraintTop_toBottomOf="@+id/addrestrm_tvName" >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etRestroomName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:ems="10"
+            android:fontFamily="@font/varela_round"
+            android:hint="Restroom name"
+            android:inputType="textPersonName"
+            android:textColor="#1d1d1d"
+            android:textSize="14sp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/add_filter1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/etRestroomName"
+        app:layout_constraintTop_toBottomOf="@+id/tilRestroomName"
         tools:layout_editor_absoluteX="7dp">
 
         <LinearLayout
@@ -176,5 +183,40 @@
         android:textColor="#1d1d1d"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_filter1" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilLocType"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#fffbfa"
+        android:hint="Location Type"
+        app:layout_constraintTop_toBottomOf="@+id/addrestrm_tvLocType"
+        app:startIconDrawable="@drawable/ic_baseline_map_24"
+        tools:layout_editor_absoluteX="20dp" />
+
+    <AutoCompleteTextView
+        android:id="@+id/actvLocType"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:inputType="none"
+        app:layout_constraintBottom_toBottomOf="@+id/tilLocType"
+        app:layout_constraintEnd_toEndOf="@+id/tilLocType"
+        app:layout_constraintStart_toStartOf="@+id/tilLocType"
+        app:layout_constraintTop_toTopOf="@+id/tilLocType" />
+
+    <TextView
+        android:id="@+id/addrestrm_tvToiletries"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/varela_round"
+        android:text="Toiletries"
+        android:textColor="#1d1d1d"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tilLocType" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
