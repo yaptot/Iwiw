@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Iwiw">
-        <activity android:name=".AddReviewActivity"></activity>
+        <activity android:name=".AddRestroomActivity"></activity>
+        <activity android:name=".AddReviewActivity" />
         <activity android:name=".SearchResultsActivity" />
         <activity android:name=".SearchActivity" />
         <activity android:name=".ViewRestRmActivity" />
