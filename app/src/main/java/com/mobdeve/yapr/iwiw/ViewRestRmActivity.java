@@ -169,7 +169,7 @@ public class ViewRestRmActivity extends AppCompatActivity {
         else
             imvPaid.setImageResource(R.drawable.ic_dollar_sign_grey);
 
-        if(crDisability.equalsIgnoreCase("Disabled access"))
+        if(crDisability.equalsIgnoreCase("Disability access"))
             imvDisability.setImageResource(R.drawable.ic_disability);
         else
             imvDisability.setImageResource(R.drawable.ic_disability_grey);
