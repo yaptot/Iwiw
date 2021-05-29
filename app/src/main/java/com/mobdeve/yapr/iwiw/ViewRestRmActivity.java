@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
@@ -60,8 +61,12 @@ public class ViewRestRmActivity extends AppCompatActivity {
     private FirebaseAuth mAuth; // Firebase authentication
     private FirebaseUser currUser; // Current user logged in (if any)
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private String id;
 
+    private String id;
+    private String crAddr, crDist, crRating, crRateCount, crPaid, crDisability, crBidet, crLocType;
+    ArrayList<String> crToiletries;
+    ArrayList<Review> reviews;
+    Intent gi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,31 +98,63 @@ public class ViewRestRmActivity extends AppCompatActivity {
 
         this.btnAddReview = findViewById(R.id.btnAddReview);
 
-        Intent gi = getIntent();
-        // retrieve restroom details and set components
-        String crAddr = gi.getStringExtra(MapsActivity.ADDRESS_TAG);
-        String crDist = gi.getStringExtra(MapsActivity.DISTANCE_TAG);
-        String crRating = gi.getStringExtra(MapsActivity.RATING_TAG);
+        gi = getIntent();
+    }
 
-        String crRateCount = gi.getStringExtra(MapsActivity.RATE_COUNT_TAG);
-
-        String crPaid = gi.getStringExtra(MapsActivity.CATEG_PAID);
-        String crDisability = gi.getStringExtra(MapsActivity.CATEG_DISABILITY);
-        String crBidet = gi.getStringExtra(MapsActivity.CATEG_BIDET);
-        String crLocType = gi.getStringExtra(MapsActivity.CATEG_LOCTYPE);
-        ArrayList<String> crToiletries = gi.getStringArrayListExtra(MapsActivity.CATEG_TOILETRIES);
-        ArrayList<String> strReviews = gi.getStringArrayListExtra(MapsActivity.REVIEWS_ARRAY);
-        ArrayList<Review> reviews = new ArrayList<>();
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         double crLatitude = gi.getDoubleExtra(MapsActivity.LATITUDE_TAG, 0);
         double crLongitude = gi.getDoubleExtra(MapsActivity.LONGITUDE_TAG, 0);
+        reviews = new ArrayList<>();
+        crToiletries = new ArrayList<>();
 
-        Log.d("DATA", "DATA: " + strReviews.toString());
+        db.collection("restrooms").whereEqualTo("latitude", crLatitude).whereEqualTo("longitude", crLongitude).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    id = task.getResult().getDocuments().get(0).getId();
+                    initStrings(task.getResult().getDocuments().get(0));
+                    initDisplay();
+                    Log.d("DATA", "RESTROOM ID: " + id);
+                } else {
+                    Log.d("DATA", "DATA: Restroom ID not found");
+                }
+            }
+        });
+    }
 
-        for(String str : strReviews) {
-            reviews.add(gson.fromJson(str, Review.class));
-        }
+    private void initStrings(DocumentSnapshot document) {
+       Restroom restroom = document.toObject(Restroom.class);
 
+       crAddr = restroom.getName();
+       crDisability = restroom.getCateg_disability();
+       crBidet = restroom.getCateg_bidet();
+       crLocType = restroom.getCateg_loc_type();
+       crPaid = restroom.getCateg_paid();
+       crToiletries = restroom.getCateg_toiletries();
+       crRating = String.valueOf(restroom.getReviews().size());
+
+       int total = 0;
+       double average;
+
+       if(restroom.getReviews().size() > 0) {
+           for(Review review : restroom.getReviews()) {
+               total += review.getRating();
+               reviews.add(review);
+           }
+           average = total / (double) restroom.getReviews().size();
+       } else {
+           average = 0;
+       }
+
+       crRating = String.valueOf(average);
+       crRateCount = String.valueOf(restroom.getReviews().size());
+       crDist = gi.getStringExtra(MapsActivity.DISTANCE_TAG);
+    }
+
+    private void initDisplay() {
         Log.d("DATA", "DATA AFTER LOOP: " + reviews.toString());
 
         tvAddress.setText(crAddr);
@@ -153,18 +190,6 @@ public class ViewRestRmActivity extends AppCompatActivity {
 
         showReviews(reviews);
 
-        db.collection("restrooms").whereEqualTo("latitude", crLatitude).whereEqualTo("longitude", crLongitude).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    id = task.getResult().getDocuments().get(0).getId();
-                    Log.d("DATA", "RESTROOM ID: " + id);
-                } else {
-                    Log.d("DATA", "DATA: Restroom ID not found");
-                }
-            }
-        });
-
         if(currUser != null) {
             btnAddReview.setVisibility(View.VISIBLE);
             btnAddReview.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +202,6 @@ public class ViewRestRmActivity extends AppCompatActivity {
                 }
             });
         }
-
     }
 
     private void setRating(String crRating) {
@@ -222,9 +246,11 @@ public class ViewRestRmActivity extends AppCompatActivity {
 
     private void showReviews(ArrayList<Review> reviews) {
         Log.d("TRACK", "TRACK: in showReviews");
+
+        ll_viewReviews.removeAllViews();
+
         for(Review review : reviews) {
             Log.d("LOOP", "LOOP: hehe");
-
             LinearLayout llBox = new LinearLayout(ViewRestRmActivity.this);
             llBox.setBackground(getDrawable(R.drawable.shape_details));
             llBox.setPadding(15, 20, 15, 20);
@@ -261,7 +287,6 @@ public class ViewRestRmActivity extends AppCompatActivity {
             tvReviewText.setTextColor(Color.parseColor("#1d1d1d"));
             tvReviewText.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             llBox.addView(tvReviewText);
-
         }
     }
 }

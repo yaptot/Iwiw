@@ -80,7 +80,6 @@ public class MapsActivity extends AppCompatActivity
     // component declarations
     private ImageView imvNavArrow;
     public DrawerLayout drawerLayout;
-    private PopupWindow popupWindow;
 
     // var declarations
     private GoogleMap mMap; //Map
@@ -123,7 +122,6 @@ public class MapsActivity extends AppCompatActivity
 
     public void init() {
         drawerLayout = findViewById(R.id.drawerLayout);
-
 
         // Instantiate Location Services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -186,7 +184,6 @@ public class MapsActivity extends AppCompatActivity
         dist = 0; // Stores the distance of the closest restroom to the user
         closest = new Restroom(); // Stores the information of the closest restroom to the user
 
-
         for (Restroom restroom : restrooms) {
             LatLng point = new LatLng(restroom.getLatitude(), restroom.getLongitude());
 
@@ -208,7 +205,6 @@ public class MapsActivity extends AppCompatActivity
 
         // Creates a popup window to initially show the closest restroom to the user
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View restroomPopup = inflater.inflate(R.layout.restroom_popup, null);
 
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
@@ -217,15 +213,11 @@ public class MapsActivity extends AppCompatActivity
         int width = size.x;
         int height = LinearLayout.LayoutParams.WRAP_CONTENT;
 
-        popupWindow = new PopupWindow(restroomPopup, width - 100, height);
-
-        popupWindow.showAtLocation(getWindow().getDecorView().getRootView(), Gravity.BOTTOM, 0, 300);
-
         // Get the components inside the popup window
-        TextView tvAddress = restroomPopup.findViewById(R.id.tvAddress);
-        TextView tvLocDistance = restroomPopup.findViewById(R.id.tvLocDistance);
-        TextView tvRatings = restroomPopup.findViewById(R.id.sr_tvRatings);
-        TextView tvRateCount = restroomPopup.findViewById(R.id.sr_tvRateCount);
+        TextView tvAddress = findViewById(R.id.tvAddress);
+        TextView tvLocDistance = findViewById(R.id.tvLocDistance);
+        TextView tvRatings = findViewById(R.id.sr_tvRatings);
+        TextView tvRateCount = findViewById(R.id.sr_tvRateCount);
 
         tvAddress.setText(closest.getName());
         tvLocDistance.setText(String.format("%.2f", dist) + " m");
@@ -235,15 +227,17 @@ public class MapsActivity extends AppCompatActivity
 
         tvRateCount.setText("(" + reviews.size() + " ratings)");
 
-
-        tvRatings.setText(String.format("%.1f", computeAverage(reviews)));
+        if(closest.getReviews().size() > 0)
+            tvRatings.setText(String.format("%.1f", computeAverage(reviews)));
+        else
+            tvRatings.setText("0.0");
 
         // setting Adapter to populate the data into RecyclerView -> binding them to each other
-        this.rvCategList = restroomPopup.findViewById(R.id.rv_CategList);
+        this.rvCategList = findViewById(R.id.rv_CategList);
 
         strCategList = new ArrayList<>();
 
-        setupPopup(closest, dist, restroomPopup);
+        setupPopup(closest, dist);
 
         // Marker onClick Listener
         mMap.setOnMarkerClickListener(marker -> {
@@ -258,9 +252,16 @@ public class MapsActivity extends AppCompatActivity
 
             tvAddress.setText(restroom.getName());
             tvLocDistance.setText(String.format("%.2f", results[0]) + " m");
+            tvRateCount.setText("(" + restroom.getReviews().size() + " ratings)");
 
-            tvRatings.setText(String.format("%.1f", computeAverage(markerReviews)));
-            setupPopup(restroom, results[0], restroomPopup);
+            Log.d("DATA", "restroom.getreviews.size() = " + restroom.getReviews().size());
+
+            if(restroom.getReviews().size() > 0)
+                tvRatings.setText(String.format("%.1f", computeAverage(markerReviews)));
+            else
+                tvRatings.setText("0.0");
+
+            setupPopup(restroom, results[0]);
 
             return true;
         });
@@ -279,7 +280,7 @@ public class MapsActivity extends AppCompatActivity
         return total / reviews.size();
     }
 
-    private void setupPopup(Restroom restroom, float results, View restroomPopup) {
+    private void setupPopup(Restroom restroom, float results) {
         strCategList = new ArrayList<>();
 
         strCategList.add(restroom.getCateg_paid());
@@ -293,7 +294,7 @@ public class MapsActivity extends AppCompatActivity
         rvCategList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         // listener for navigate arrow btn in Popup window (to handle updated clicked markers)
-        this.imvNavArrow = restroomPopup.findViewById(R.id.imvArrow);
+        this.imvNavArrow = findViewById(R.id.imvArrow);
         imvNavArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -306,10 +307,14 @@ public class MapsActivity extends AppCompatActivity
                     strReviews.add(gson.toJson(review));
                 }
 
-                // TODO get id of document
                 i.putExtra(MapsActivity.ADDRESS_TAG, restroom.getName());
                 i.putExtra(MapsActivity.DISTANCE_TAG, String.format("%.2f", results));
-                i.putExtra(MapsActivity.RATING_TAG, String.valueOf(computeAverage(restroom.getReviews())));
+
+                if(restroom.getReviews().size() > 0)
+                    i.putExtra(MapsActivity.RATING_TAG, String.valueOf(computeAverage(restroom.getReviews())));
+                else
+                    i.putExtra(MapsActivity.RATING_TAG, "-");
+
                 i.putExtra(MapsActivity.RATE_COUNT_TAG, String.valueOf(restroom.getReviews().size()));
                 i.putExtra(MapsActivity.CATEG_PAID, restroom.getCateg_paid());
                 i.putExtra(MapsActivity.CATEG_DISABILITY, restroom.getCateg_disability());
@@ -394,12 +399,12 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        popupWindow.dismiss();
 
     }
 
