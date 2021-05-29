@@ -3,6 +3,7 @@ package com.mobdeve.yapr.iwiw;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -177,6 +178,7 @@ public class AddRestroomActivity extends AppCompatActivity {
                 restroomObj.put("latitude", MapsActivity.currentLocation.getLatitude());
                 restroomObj.put("longitude", MapsActivity.currentLocation.getLongitude());
                 restroomObj.put("name", crName);
+                restroomObj.put("reviews", new ArrayList<>());
 //                restroomObj.put("reviews", null);
 
                 // Add data to Firestore db
@@ -184,13 +186,15 @@ public class AddRestroomActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                             @Override
                             public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if (task.isSuccessful())
+                                if (task.isSuccessful()) {
                                     Log.d(ADD_RESTROOM_ACTIVITY,": restroom added!");
+                                    finish();
+                                }
+
                                 else
                                     Log.d(ADD_RESTROOM_ACTIVITY, ": failed.");
                             }
                         });
-                finish();
             }
         });
 
