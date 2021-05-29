@@ -139,7 +139,7 @@ public class AddRestroomActivity extends AppCompatActivity {
 
                 // DATA VALIDATION before inserting into db
                 if (crName.isEmpty())
-                    Toast.makeText(AddRestroomActivity.this, "Restroom must have name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddRestroomActivity.this, "Please input restroom name", Toast.LENGTH_SHORT).show();
 
                 if(!isPaid) strPaid = "Paid";
                 else strPaid = "Free";
