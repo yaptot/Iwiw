@@ -138,9 +138,6 @@ public class AddRestroomActivity extends AppCompatActivity {
                 ArrayList<String> strToiletriesList = new ArrayList<>();
 
                 // DATA VALIDATION before inserting into db
-                if (crName.isEmpty())
-                    Toast.makeText(AddRestroomActivity.this, "Please input restroom name", Toast.LENGTH_SHORT).show();
-
                 if(!isPaid) strPaid = "Paid";
                 else strPaid = "Free";
 
@@ -154,47 +151,52 @@ public class AddRestroomActivity extends AppCompatActivity {
                 if (swSoap.isChecked()) strToiletriesList.add("Soap");
                 if (swNapkin.isChecked()) strToiletriesList.add("Napkin");
 
-                // TEST LOGS
-                Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crName - " + crName);
-                Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crCategPaid - " + strPaid);
-                Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crCategDisability - " + strDisability);
-                Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crCategBidet - " + strBidet);
-                Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crLocType - " + strLocType);
-                for (String str : strToiletriesList) {
-                    Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crToiletries - " + str);
-                }
-                Log.d(ADD_RESTROOM_ACTIVITY, "ADD: latitude - " + MapsActivity.currentLocation.getLongitude());
-                Log.d(ADD_RESTROOM_ACTIVITY, "ADD: longitude - " + MapsActivity.currentLocation.getLongitude());
+                if (crName.isEmpty())
+                    Toast.makeText(AddRestroomActivity.this, "Please input restroom name", Toast.LENGTH_SHORT).show();
+                else if (strLocType.isEmpty())
+                    Toast.makeText(AddRestroomActivity.this, "Please select a location type", Toast.LENGTH_SHORT).show();
+                else {
+                    // TEST LOGS
+                    Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crName - " + crName);
+                    Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crCategPaid - " + strPaid);
+                    Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crCategDisability - " + strDisability);
+                    Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crCategBidet - " + strBidet);
+                    Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crLocType - " + strLocType);
+                    for (String str : strToiletriesList) {
+                        Log.d(ADD_RESTROOM_ACTIVITY, "ADD: crToiletries - " + str);
+                    }
+                    Log.d(ADD_RESTROOM_ACTIVITY, "ADD: latitude - " + MapsActivity.currentLocation.getLongitude());
+                    Log.d(ADD_RESTROOM_ACTIVITY, "ADD: longitude - " + MapsActivity.currentLocation.getLongitude());
 
-                // Restroom collection
-                CollectionReference restroomDB = db.collection("restrooms");
-                // Put data in a Restroom object
-                Map<String, Object> restroomObj = new HashMap<>();
-                restroomObj.put("categ_bidet", strBidet);
-                restroomObj.put("categ_disability", strDisability);
-                restroomObj.put("categ_loc_type", strLocType);
-                restroomObj.put("categ_paid", strPaid);
-                restroomObj.put("categ_toiletries", strToiletriesList);
-                restroomObj.put("latitude", MapsActivity.currentLocation.getLatitude());
-                restroomObj.put("longitude", MapsActivity.currentLocation.getLongitude());
-                restroomObj.put("name", crName);
-                restroomObj.put("reviews", new ArrayList<>());
-//                restroomObj.put("reviews", null);
+                    // Restroom collection
+                    CollectionReference restroomDB = db.collection("restrooms");
+                    // Put data in a Restroom object
+                    Map<String, Object> restroomObj = new HashMap<>();
+                    restroomObj.put("categ_bidet", strBidet);
+                    restroomObj.put("categ_disability", strDisability);
+                    restroomObj.put("categ_loc_type", strLocType);
+                    restroomObj.put("categ_paid", strPaid);
+                    restroomObj.put("categ_toiletries", strToiletriesList);
+                    restroomObj.put("latitude", MapsActivity.currentLocation.getLatitude());
+                    restroomObj.put("longitude", MapsActivity.currentLocation.getLongitude());
+                    restroomObj.put("name", crName);
+                    restroomObj.put("reviews", new ArrayList<>());
 
-                // Add data to Firestore db
-                restroomDB.add(restroomObj)
-                        .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentReference> task) {
-                                if (task.isSuccessful()) {
-                                    Log.d(ADD_RESTROOM_ACTIVITY,": restroom added!");
-                                    finish();
+                    // Add the Restroom data to Firestore db
+                    restroomDB.add(restroomObj)
+                            .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentReference> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(ADD_RESTROOM_ACTIVITY,"Restroom added!");
+                                        finish();
+                                    }
+
+                                    else
+                                        Log.d(ADD_RESTROOM_ACTIVITY, "Restroom adding failed.");
                                 }
-
-                                else
-                                    Log.d(ADD_RESTROOM_ACTIVITY, ": failed.");
-                            }
-                        });
+                            });
+                }
             }
         });
 

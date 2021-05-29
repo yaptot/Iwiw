@@ -90,7 +90,8 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder> {
             total += review.getRating();
         }
 
-        ave = total / reviews.size();
+        if (!reviews.isEmpty())
+            ave = total / reviews.size();
 
         holder.sr_tvRatings.setText(String.format("%.1f", ave));
         holder.sr_tvRateCount.setText("(" + reviews.size() + " ratings)");
