@@ -467,6 +467,7 @@ public class MapsActivity extends AppCompatActivity
         FirebaseAuth.getInstance().signOut();
         findViewById(R.id.ll_logout).setVisibility(View.GONE);
         findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
+        findViewById(R.id.ll_addRestroom).setVisibility(View.GONE);
         TextView tv = findViewById(R.id.tvNavTitle);
         tv.setText("Iwiw");
     }
