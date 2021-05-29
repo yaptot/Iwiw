@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/addrestrm_tvName">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etRestroomName"
+            android:id="@+id/add_etRestroomName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -195,7 +195,7 @@
         tools:layout_editor_absoluteX="20dp">
 
         <AutoCompleteTextView
-            android:id="@+id/actvLocType"
+            android:id="@+id/add_actvLocType"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -248,7 +248,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/swTissue"
+                android:id="@+id/add_swTissue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -280,7 +280,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/swSoap"
+                android:id="@+id/add_swSoap"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -311,7 +311,7 @@
                 android:textStyle="bold" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/swNapkin"
+                android:id="@+id/add_swNapkin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -326,7 +326,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:fontFamily="@font/varela_round"
-        android:text="Add"
+        android:text="Add Restroom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_toiletries" />
