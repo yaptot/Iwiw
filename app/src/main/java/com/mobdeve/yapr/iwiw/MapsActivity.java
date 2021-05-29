@@ -115,7 +115,6 @@ public class MapsActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             init();
-            startLocationUpdates();
         }
 
     }
@@ -202,16 +201,6 @@ public class MapsActivity extends AppCompatActivity
                             .title(restroom.getName())
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_marker))).setTag(restroom);
         }
-
-        // Creates a popup window to initially show the closest restroom to the user
-        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-
-        int width = size.x;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
 
         // Get the components inside the popup window
         TextView tvAddress = findViewById(R.id.tvAddress);
@@ -368,6 +357,8 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+
+        startLocationUpdates();
 
         // get Firebase instance
         mAuth = FirebaseAuth.getInstance();
