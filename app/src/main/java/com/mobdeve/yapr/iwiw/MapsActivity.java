@@ -371,11 +371,13 @@ public class MapsActivity extends AppCompatActivity
         if(currUser != null) {
             findViewById(R.id.ll_login).setVisibility(View.GONE);
             findViewById(R.id.ll_logout).setVisibility(View.VISIBLE);
+            findViewById(R.id.ll_addRestroom).setVisibility(View.VISIBLE);
             TextView tv = findViewById(R.id.tvNavTitle);
             tv.setText("Hi, " + currUser.getDisplayName() + "!");
         }
         else {
             findViewById(R.id.ll_logout).setVisibility(View.GONE);
+            findViewById(R.id.ll_addRestroom).setVisibility(View.GONE);
             findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
             TextView tv = findViewById(R.id.tvNavTitle);
             tv.setText("Iwiw");
@@ -440,7 +442,11 @@ public class MapsActivity extends AppCompatActivity
 
     public void clickMap(View view) {
         // Recreate activity
+        recreate();
+    }
 
+    public void clickAdd(View view) {
+        redirectActivity(this, AddRestroomActivity.class);
     }
 
     public void clickLogin(View view) {
@@ -461,6 +467,7 @@ public class MapsActivity extends AppCompatActivity
         FirebaseAuth.getInstance().signOut();
         findViewById(R.id.ll_logout).setVisibility(View.GONE);
         findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
+        findViewById(R.id.ll_addRestroom).setVisibility(View.GONE);
         TextView tv = findViewById(R.id.tvNavTitle);
         tv.setText("Iwiw");
     }
