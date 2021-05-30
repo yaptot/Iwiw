@@ -23,7 +23,6 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 public class RegisterActivity extends AppCompatActivity {
     // TAG declarations
     public static final String REG_ACTIVITY = "RegActivity";
-    public static final String USERNAME_TAG = "Username";
 
     // Firebase authentication
     private FirebaseAuth mAuth;
@@ -138,8 +137,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
-//                            // Initialize Firebase Auth
-//                            mAuth = FirebaseAuth.getInstance();
+                            // Initialize Firebase Auth
                             currUser = mAuth.getCurrentUser();
 
                             addUsername(uname);
