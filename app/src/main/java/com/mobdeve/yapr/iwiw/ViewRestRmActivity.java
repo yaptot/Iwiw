@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -263,21 +264,37 @@ public class ViewRestRmActivity extends AppCompatActivity {
 
             ll_viewReviews.addView(llBox);
 
+            LinearLayout llFirst = new LinearLayout(ViewRestRmActivity.this);
+            llFirst.setOrientation(LinearLayout.HORIZONTAL);
+            llFirst.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            llBox.addView(llFirst);
+
             TextView tvUsername = new TextView(ViewRestRmActivity.this);
             tvUsername.setText(review.getUsername());
             tvUsername.setTextColor(Color.parseColor("#49c6e5"));
             tvUsername.setTypeface(ResourcesCompat.getFont(ViewRestRmActivity.this, R.font.varela_round), Typeface.BOLD);
-            tvUsername.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            marginParams.bottomMargin = 5;
+            tvUsername.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            marginParams = new ViewGroup.MarginLayoutParams(tvUsername.getLayoutParams());
+            marginParams.rightMargin = 35;
             tvUsername.setLayoutParams(marginParams);
-            llBox.addView(tvUsername);
+            llFirst.addView(tvUsername);
+
+            TextView tvDate = new TextView(ViewRestRmActivity.this);
+            tvDate.setText(review.getDate());
+            tvDate.setTypeface(ResourcesCompat.getFont(ViewRestRmActivity.this, R.font.varela_round));
+            tvDate.setTextColor(Color.parseColor("#666666"));
+            tvDate.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+            tvDate.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+            marginParams = new ViewGroup.MarginLayoutParams(tvDate.getLayoutParams());
+            llFirst.addView(tvDate);
 
             TextView tvReviewRating = new TextView(ViewRestRmActivity.this);
             tvReviewRating.setText(review.getRating() + " out of 5");
             tvReviewRating.setTypeface(ResourcesCompat.getFont(ViewRestRmActivity.this, R.font.varela_round));
             tvReviewRating.setTextColor(Color.parseColor("#666666"));
             tvReviewRating.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-            marginParams.bottomMargin = 10;
+            marginParams = new ViewGroup.MarginLayoutParams(tvReviewRating.getLayoutParams());
+            marginParams.bottomMargin = 20;
             tvReviewRating.setLayoutParams(marginParams);
             llBox.addView(tvReviewRating);
 

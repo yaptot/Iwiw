@@ -438,7 +438,6 @@ public class MapsActivity extends AppCompatActivity
 
     public void clickMap(View view) {
         // Recreate activity
-        recreate();
     }
 
     public void clickAdd(View view) {

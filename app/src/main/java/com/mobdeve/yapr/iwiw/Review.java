@@ -1,9 +1,11 @@
 package com.mobdeve.yapr.iwiw;
 
+
 public class Review {
     private String username;
     private int rating;
     private String text_review;
+    private String date;
 
     public String getUsername() {
         return username;
@@ -27,5 +29,13 @@ public class Review {
 
     public void setText_review(String text_review) {
         this.text_review = text_review;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
