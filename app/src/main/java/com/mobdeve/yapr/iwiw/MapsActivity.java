@@ -93,6 +93,7 @@ public class MapsActivity extends AppCompatActivity
     private FirebaseAuth mAuth; // Firebase authentication
     private FirebaseUser currUser; // Current user logged in (if any)
     private Gson gson = new Gson(); // Gson
+    private boolean isGenerated;
 
     private ArrayList<Restroom> restrooms = new ArrayList<>(); // Restrooms available
     public static Location currentLocation; // Current Location
@@ -135,7 +136,7 @@ public class MapsActivity extends AppCompatActivity
         // Instantiate Location Services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Instantiate Callback Function for location updates
+        // Instantiate Callback Function for location updates (will not be called unless location is updated)
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -145,31 +146,36 @@ public class MapsActivity extends AppCompatActivity
                 for (Location location : locationResult.getLocations()) {
                     currentLocation = location;
                 }
-                // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                SupportMapFragment mapFragment = SupportMapFragment.newInstance();
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .add(R.id.fragmentContainer, mapFragment)
-                        .commit();
 
-                // Get all restrooms from Firestore
-                db.collection("restrooms").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    // When the query is complete
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        // If there are results
-                        if (task.isSuccessful()) {
-                            // Add each restroom to the restrooms ArrayList
-                            restrooms.clear();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                restrooms.add(document.toObject(Restroom.class));
-                            }
+                if(!isGenerated) {
+                    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+                    SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+                    getSupportFragmentManager()
+                            .beginTransaction()
+                            .add(R.id.fragmentContainer, mapFragment)
+                            .commit();
 
-                            callMap(mapFragment);
-                        } else
-                            Log.d("query", "NO RESTROOMS");
-                    }
-                });
+                    // Get all restrooms from Firestore
+                    db.collection("restrooms").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        // When the query is complete
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            // If there are results
+                            if (task.isSuccessful()) {
+                                // Add each restroom to the restrooms ArrayList
+                                restrooms.clear();
+                                Log.d("TRACK", "TRACK: restrooms.clear()");
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    restrooms.add(document.toObject(Restroom.class));
+                                }
+                                isGenerated = true;
+                                callMap(mapFragment);
+                            } else
+                                Log.d("query", "NO RESTROOMS");
+                        }
+                    });
+                }
+
             }
         };
     }
@@ -181,8 +187,7 @@ public class MapsActivity extends AppCompatActivity
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -368,7 +373,7 @@ public class MapsActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-
+        isGenerated = false;
         startLocationUpdates();
         // get Firebase instance
         mAuth = FirebaseAuth.getInstance();
@@ -387,6 +392,35 @@ public class MapsActivity extends AppCompatActivity
             findViewById(R.id.ll_login).setVisibility(View.VISIBLE);
             TextView tv = findViewById(R.id.tvNavTitle);
             tv.setText("Iwiw");
+        }
+
+        if(!isGenerated) {
+            // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+            SupportMapFragment mapFragment = SupportMapFragment.newInstance();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragmentContainer, mapFragment)
+                    .commit();
+
+            // Get all restrooms from Firestore
+            db.collection("restrooms").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                // When the query is complete
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    // If there are results
+                    if (task.isSuccessful()) {
+                        // Add each restroom to the restrooms ArrayList
+                        restrooms.clear();
+                        Log.d("TRACK", "TRACK: restrooms.clear()");
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            restrooms.add(document.toObject(Restroom.class));
+                        }
+                        isGenerated = true;
+                        callMap(mapFragment);
+                    } else
+                        Log.d("query", "NO RESTROOMS");
+                }
+            });
         }
     }
 
