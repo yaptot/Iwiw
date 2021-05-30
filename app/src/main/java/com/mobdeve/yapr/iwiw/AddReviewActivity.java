@@ -69,6 +69,8 @@ public class AddReviewActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         currUser = mAuth.getCurrentUser();
 
+        crRating = 1;
+
         // get Username
         currUname = currUser.getDisplayName();
 

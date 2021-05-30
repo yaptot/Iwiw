@@ -214,7 +214,10 @@ public class MapsActivity extends AppCompatActivity
 
         ArrayList<Review> reviews = closest.getReviews();
 
-        tvRateCount.setText("(" + reviews.size() + " ratings)");
+        if(reviews.size() != 1)
+            tvRateCount.setText("(" + reviews.size() + " ratings)");
+        else
+            tvRateCount.setText("(" + reviews.size() + " rating)");
 
         if(closest.getReviews().size() > 0)
             tvRatings.setText(String.format("%.1f", computeAverage(reviews)));
@@ -241,9 +244,13 @@ public class MapsActivity extends AppCompatActivity
 
             tvAddress.setText(restroom.getName());
             tvLocDistance.setText(String.format("%.2f", results[0]) + " m");
-            tvRateCount.setText("(" + restroom.getReviews().size() + " ratings)");
 
-            Log.d("DATA", "restroom.getreviews.size() = " + restroom.getReviews().size());
+            if(reviews.size() != 1)
+                tvRateCount.setText("(" + markerReviews.size() + " ratings)");
+            else
+                tvRateCount.setText("(" + markerReviews.size()+ " rating)");
+
+            Log.d("DATA", "restroom.getreviews.size() = " + markerReviews.size());
 
             if(restroom.getReviews().size() > 0)
                 tvRatings.setText(String.format("%.1f", computeAverage(markerReviews)));
@@ -260,7 +267,7 @@ public class MapsActivity extends AppCompatActivity
     }
 
     private double computeAverage(ArrayList<Review> reviews) {
-        int total = 0;
+        double total = 0;
 
         for(Review review : reviews) {
             total += review.getRating();
@@ -359,7 +366,6 @@ public class MapsActivity extends AppCompatActivity
         super.onStart();
 
         startLocationUpdates();
-
         // get Firebase instance
         mAuth = FirebaseAuth.getInstance();
         // get current user
@@ -378,8 +384,6 @@ public class MapsActivity extends AppCompatActivity
             TextView tv = findViewById(R.id.tvNavTitle);
             tv.setText("Iwiw");
         }
-
-
     }
 
     @Override
