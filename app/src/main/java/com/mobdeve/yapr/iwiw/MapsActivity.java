@@ -94,6 +94,7 @@ public class MapsActivity extends AppCompatActivity
     private FirebaseUser currUser; // Current user logged in (if any)
     private Gson gson = new Gson(); // Gson
     private boolean isGenerated;
+    private boolean firstRun;
 
     private ArrayList<Restroom> restrooms = new ArrayList<>(); // Restrooms available
     public static Location currentLocation; // Current Location
@@ -120,6 +121,7 @@ public class MapsActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             init();
+            firstRun = true;
         }
 
     }
@@ -169,6 +171,7 @@ public class MapsActivity extends AppCompatActivity
                                     restrooms.add(document.toObject(Restroom.class));
                                 }
                                 isGenerated = true;
+                                firstRun = false;
                                 callMap(mapFragment);
                             } else
                                 Log.d("query", "NO RESTROOMS");
@@ -394,7 +397,7 @@ public class MapsActivity extends AppCompatActivity
             tv.setText("Iwiw");
         }
 
-        if(!isGenerated) {
+        if(!isGenerated && !firstRun) {
             // Obtain the SupportMapFragment and get notified when the map is ready to be used.
             SupportMapFragment mapFragment = SupportMapFragment.newInstance();
             getSupportFragmentManager()
