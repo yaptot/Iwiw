@@ -121,6 +121,7 @@ public class MapsActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             init();
+            firstRun = true;
         }
 
     }
@@ -376,7 +377,6 @@ public class MapsActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         isGenerated = false;
-        firstRun = true;
         startLocationUpdates();
         // get Firebase instance
         mAuth = FirebaseAuth.getInstance();
