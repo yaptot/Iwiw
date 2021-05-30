@@ -55,11 +55,6 @@ public class AddRestroomActivity extends AppCompatActivity {
     private boolean isDisability;
     private boolean isBidet;
 
-    // for switch state of sw category buttons
-    private String strTissue;
-    private String strSoap;
-    private String strNapkin;
-
     // for Firestore db
     private FirebaseAuth mAuth; // Firebase authentication
     private FirebaseUser currUser; // Current user logged in (if any)
@@ -138,8 +133,8 @@ public class AddRestroomActivity extends AppCompatActivity {
                 ArrayList<String> strToiletriesList = new ArrayList<>();
 
                 // DATA VALIDATION before inserting into db
-                if(!isPaid) strPaid = "Paid";
-                else strPaid = "Free";
+                if(!isPaid) strPaid = "Free";
+                else strPaid = "Paid";
 
                 if(!isDisability) strDisability = "No disabled";
                 else strDisability = "Disability access";

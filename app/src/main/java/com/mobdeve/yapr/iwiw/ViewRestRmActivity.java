@@ -150,7 +150,7 @@ public class ViewRestRmActivity extends AppCompatActivity {
            average = 0;
        }
 
-       crRating = String.valueOf(average);
+       crRating = String.format("%.1f",average);
        crRateCount = String.valueOf(restroom.getReviews().size());
        crDist = gi.getStringExtra(MapsActivity.DISTANCE_TAG);
     }
