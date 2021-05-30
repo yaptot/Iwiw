@@ -21,7 +21,11 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class AddReviewActivity extends AppCompatActivity {
@@ -48,6 +52,7 @@ public class AddReviewActivity extends AppCompatActivity {
     private String crReview;
     private String currUname;
     private String crID;
+    private String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +142,11 @@ public class AddReviewActivity extends AppCompatActivity {
                 // get text review from User
                 crReview = etReviewText.getText().toString();
 
+                // get date
+                Date d = Calendar.getInstance().getTime();
+                SimpleDateFormat df = new SimpleDateFormat("dd/MMMM/yy", Locale.getDefault());
+                date = df.format(d);
+
                 Log.d("ADD REVIEW", "In btnPush click");
 
                 // Add review to the Restroom (Ref: https://cloud.google.com/firestore/docs/manage-data/add-data#javaandroid)
@@ -152,10 +162,12 @@ public class AddReviewActivity extends AppCompatActivity {
                 reviewObj.put("rating", crRating);
                 reviewObj.put("text_review", crReview);
                 reviewObj.put("username", currUname);
+                reviewObj.put("date", date);
 
                 Log.d("ADD REVIEW", "crRating: " + crRating);
                 Log.d("ADD REVIEW", "crReview: " + crReview);
                 Log.d("ADD REVIEW", "Username: " + currUname);
+                Log.d("ADD REVIEW", "Date: " + date);
 
                 // add review to array of "reviews" attribute of Restroom document
                 restroomDB.document(crID)

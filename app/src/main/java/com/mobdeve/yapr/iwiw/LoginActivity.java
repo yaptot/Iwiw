@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                 // navigate to <Register activity>
                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
+                finish();
             }
         });
     }
