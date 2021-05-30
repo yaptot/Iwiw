@@ -275,7 +275,7 @@ public class ViewRestRmActivity extends AppCompatActivity {
             tvUsername.setTypeface(ResourcesCompat.getFont(ViewRestRmActivity.this, R.font.varela_round), Typeface.BOLD);
             tvUsername.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             marginParams = new ViewGroup.MarginLayoutParams(tvUsername.getLayoutParams());
-            marginParams.rightMargin = 35;
+            marginParams.rightMargin = 25;
             tvUsername.setLayoutParams(marginParams);
             llFirst.addView(tvUsername);
 
@@ -294,7 +294,7 @@ public class ViewRestRmActivity extends AppCompatActivity {
             tvReviewRating.setTextColor(Color.parseColor("#666666"));
             tvReviewRating.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             marginParams = new ViewGroup.MarginLayoutParams(tvReviewRating.getLayoutParams());
-            marginParams.bottomMargin = 20;
+            marginParams.bottomMargin = 10;
             tvReviewRating.setLayoutParams(marginParams);
             llBox.addView(tvReviewRating);
 

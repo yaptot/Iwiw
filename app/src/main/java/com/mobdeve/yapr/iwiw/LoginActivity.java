@@ -87,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                 // navigate to <Register activity>
                 Intent i = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(i);
-                finish();
             }
         });
     }
@@ -110,8 +109,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                 // navigate to <Maps activity>
                                 finish();
-
-                                // TODO: enable Map features for logged in user [ Rate, Review, Add Restroom ]
 
                             } else {
                                 Log.d(LOGIN_ACTIVITY, "Failed login. /n", task.getException());
