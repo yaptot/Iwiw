@@ -80,6 +80,10 @@ public class MapsActivity extends AppCompatActivity
     // component declarations
     private ImageView imvNavArrow;
     public DrawerLayout drawerLayout;
+    private TextView tvAddress;
+    private TextView tvLocDistance;
+    private TextView tvRatings;
+    private TextView tvRateCount;
 
     // var declarations
     private GoogleMap mMap; //Map
@@ -122,6 +126,12 @@ public class MapsActivity extends AppCompatActivity
     public void init() {
         drawerLayout = findViewById(R.id.drawerLayout);
 
+        // Get the components inside the popup window
+        tvAddress = findViewById(R.id.tvAddress);
+        tvLocDistance = findViewById(R.id.tvLocDistance);
+        tvRatings = findViewById(R.id.sr_tvRatings);
+        tvRateCount = findViewById(R.id.sr_tvRateCount);
+
         // Instantiate Location Services
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -150,6 +160,7 @@ public class MapsActivity extends AppCompatActivity
                         // If there are results
                         if (task.isSuccessful()) {
                             // Add each restroom to the restrooms ArrayList
+                            restrooms.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 restrooms.add(document.toObject(Restroom.class));
                             }
@@ -195,22 +206,15 @@ public class MapsActivity extends AppCompatActivity
             }
 
             // Add a marker to the map
-            mMap.addMarker(
+            googleMap.addMarker(
                     new MarkerOptions()
                             .position(point)
                             .title(restroom.getName())
                             .icon(bitmapDescriptorFromVector(this, R.drawable.ic_marker))).setTag(restroom);
         }
 
-        // Get the components inside the popup window
-        TextView tvAddress = findViewById(R.id.tvAddress);
-        TextView tvLocDistance = findViewById(R.id.tvLocDistance);
-        TextView tvRatings = findViewById(R.id.sr_tvRatings);
-        TextView tvRateCount = findViewById(R.id.sr_tvRateCount);
-
         tvAddress.setText(closest.getName());
         tvLocDistance.setText(String.format("%.2f", dist) + " m");
-
 
         ArrayList<Review> reviews = closest.getReviews();
 
@@ -232,7 +236,7 @@ public class MapsActivity extends AppCompatActivity
         setupPopup(closest, dist);
 
         // Marker onClick Listener
-        mMap.setOnMarkerClickListener(marker -> {
+        googleMap.setOnMarkerClickListener(marker -> {
             Restroom restroom = (Restroom) marker.getTag();
 
             Log.d("info", restroom.getName());
@@ -263,7 +267,7 @@ public class MapsActivity extends AppCompatActivity
         });
 
         enableMyLocation();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), 15));
     }
 
     private double computeAverage(ArrayList<Review> reviews) {

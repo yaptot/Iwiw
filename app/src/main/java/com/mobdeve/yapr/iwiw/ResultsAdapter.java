@@ -81,7 +81,7 @@ class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ViewHolder> {
         Gson gson = new Gson();
 
         double ave = 0;
-        int total = 0;
+        double total = 0;
 
         ArrayList<Review> reviews = restroom.getRestroom().getReviews();
         ArrayList<String> strReviews = new ArrayList<>();
