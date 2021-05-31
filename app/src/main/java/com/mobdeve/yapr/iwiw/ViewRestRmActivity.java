@@ -163,7 +163,11 @@ public class ViewRestRmActivity extends AppCompatActivity {
 
         setRating(crRating);
         tvRatings.setText(crRating);
-        tvRateCount.setText("(" + crRateCount + " ratings)");
+
+        if (crRateCount.equals("1"))
+            tvRateCount.setText("(" + crRateCount + " rating)");
+        else
+            tvRateCount.setText("(" + crRateCount + " ratings)");
 
         if(crPaid.equalsIgnoreCase("Paid"))
             imvPaid.setImageResource(R.drawable.ic_dollar_sign);

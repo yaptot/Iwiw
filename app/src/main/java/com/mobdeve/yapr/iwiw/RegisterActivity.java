@@ -67,6 +67,8 @@ public class RegisterActivity extends AppCompatActivity {
         btnReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isValid = true;
+
                 // get User inputs
                 String email = etEmail.getText().toString();
                 String username = etUsername.getText().toString();
