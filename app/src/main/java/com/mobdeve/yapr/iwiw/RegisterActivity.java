@@ -163,6 +163,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Log.d(REG_ACTIVITY, "User registered: " + currUser.getDisplayName());
                     Intent i = new Intent(RegisterActivity.this, MapsActivity.class);
+                    Toast.makeText(RegisterActivity.this, "Register Successful!", Toast.LENGTH_SHORT).show();
                     startActivity(i);
                     finish();
                 } else {

@@ -106,15 +106,15 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (currUser != null) {
                                 Log.d(LOGIN_ACTIVITY, "Logged in as: " + currUser.getEmail());
-
+                                Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_SHORT).show();
                                 // navigate to <Maps activity>
                                 finish();
 
                             } else {
                                 Log.d(LOGIN_ACTIVITY, "Failed login. /n", task.getException());
-                                Toast.makeText(LoginActivity.this, "Please check credentials.", Toast.LENGTH_SHORT).show();
                             }
-
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Please check credentials.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
