@@ -10,325 +10,319 @@
     android:paddingRight="20dp"
     tools:context=".AddRestroomActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/varela_round"
-        android:text="Add a restroom"
-        android:textColor="#1d1d1d"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/varela_round"
-        android:text="Add a restroom to your current location."
-        android:textColor="#666666"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <TextView
-        android:id="@+id/addrestrm_tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/varela_round"
-        android:text="Name"
-        android:textColor="#1d1d1d"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRestroomName"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addrestrm_tvName">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/add_etRestroomName"
+        <LinearLayout
+            android:id="@+id/ll_scrollview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:ems="10"
-            android:fontFamily="@font/varela_round"
-            android:hint="Restroom name"
-            android:inputType="textPersonName"
-            android:textColor="#1d1d1d"
-            android:textSize="14sp" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/add_filter1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/tilRestroomName"
-        tools:layout_editor_absoluteX="7dp">
-
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/shape_details"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/add_tvPaid"
+                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
                 android:fontFamily="@font/varela_round"
-                android:text="Paid?"
-                android:textColor="#1D1D1D"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/add_imvPaid"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                app:srcCompat="@drawable/ic_dollar_sign_grey" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout3"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/shape_details"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout4"
-            app:layout_constraintTop_toTopOf="parent">
+                android:text="Add a restroom"
+                android:textColor="#1d1d1d"
+                android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/add_tvDisability"
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/varela_round"
-                android:text="Disabled access?"
-                android:textColor="#1D1D1D"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/add_imvDisability"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                app:srcCompat="@drawable/ic_disability_grey" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/shape_details"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+                android:text="Add a restroom to your current location."
+                android:textColor="#666666" />
 
             <TextView
-                android:id="@+id/add_tvBidet"
+                android:id="@+id/addrestrm_tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/varela_round"
-                android:text="Bidet access?"
-                android:textAlignment="center"
-                android:textColor="#1D1D1D"
-                android:textStyle="bold" />
+                android:text="Name"
+                android:textColor="#1d1d1d" />
 
-            <ImageView
-                android:id="@+id/add_imvBidet"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="10dp"
-                app:srcCompat="@drawable/ic_bidet_grey" />
-        </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilRestroomName"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_etRestroomName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:ems="10"
+                    android:fontFamily="@font/varela_round"
+                    android:hint="Restroom name"
+                    android:inputType="textPersonName"
+                    android:textColor="#1d1d1d"
+                    android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/addrestrm_tvLocType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/varela_round"
-        android:text="Location Type"
-        android:textColor="#1d1d1d"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_filter1" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilLocType"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="Location Type"
-        app:layout_constraintTop_toBottomOf="@+id/addrestrm_tvLocType"
-        app:startIconDrawable="@drawable/ic_baseline_map_24"
-        tools:layout_editor_absoluteX="20dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_filter1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp">
 
-        <AutoCompleteTextView
-            android:id="@+id/add_actvLocType"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/varela_round"
-            android:inputType="none"
-            app:layout_constraintBottom_toBottomOf="@+id/tilLocType"
-            app:layout_constraintEnd_toEndOf="@+id/tilLocType"
-            app:layout_constraintStart_toStartOf="@+id/tilLocType"
-            app:layout_constraintTop_toTopOf="@+id/tilLocType" />
-    </com.google.android.material.textfield.TextInputLayout>
+                <LinearLayout
+                    android:id="@+id/linearLayout4"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/shape_details"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/addrestrm_tvToiletries"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/varela_round"
-        android:text="Toiletries"
-        android:textColor="#1d1d1d"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilLocType" />
+                    <TextView
+                        android:id="@+id/add_tvPaid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/varela_round"
+                        android:text="Paid?"
+                        android:textColor="#1D1D1D"
+                        android:textStyle="bold" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/add_toiletries"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/addrestrm_tvToiletries"
-        tools:layout_editor_absoluteX="7dp">
+                    <ImageView
+                        android:id="@+id/add_imvPaid"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        app:srcCompat="@drawable/ic_dollar_sign_grey" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/shape_details"
-            android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/shape_details"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+                    app:layout_constraintStart_toEndOf="@+id/linearLayout4"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/add_tvDisability"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/varela_round"
+                        android:text="Disabled access?"
+                        android:textColor="#1D1D1D"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/add_imvDisability"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        app:srcCompat="@drawable/ic_disability_grey" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/shape_details"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/add_tvBidet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/varela_round"
+                        android:text="Bidet access?"
+                        android:textAlignment="center"
+                        android:textColor="#1D1D1D"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/add_imvBidet"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="10dp"
+                        app:srcCompat="@drawable/ic_bidet_grey" />
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/add_tvTissue"
+                android:id="@+id/addrestrm_tvLocType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/varela_round"
-                android:text="Tissue"
-                android:textColor="#1D1D1D"
-                android:textStyle="bold" />
+                android:text="Location Type"
+                android:textColor="#1d1d1d" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/add_swTissue"
-                android:layout_width="wrap_content"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilLocType"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:hint="Location Type"
+                app:startIconDrawable="@drawable/ic_baseline_map_24">
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout6"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/shape_details"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout7"
-            app:layout_constraintStart_toEndOf="@+id/linearLayout5"
-            app:layout_constraintTop_toTopOf="parent">
+                <AutoCompleteTextView
+                    android:id="@+id/add_actvLocType"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/varela_round"
+                    android:inputType="none"
+                    app:layout_constraintBottom_toBottomOf="@+id/tilLocType"
+                    app:layout_constraintEnd_toEndOf="@+id/tilLocType"
+                    app:layout_constraintStart_toStartOf="@+id/tilLocType"
+                    app:layout_constraintTop_toTopOf="@+id/tilLocType" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
-                android:id="@+id/add_tvSoap"
+                android:id="@+id/addrestrm_tvToiletries"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="30dp"
                 android:fontFamily="@font/varela_round"
-                android:text="Soap"
-                android:textColor="#1D1D1D"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+                android:text="Toiletries"
+                android:textColor="#1d1d1d" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/add_swSoap"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/add_toiletries"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp">
+
+                <LinearLayout
+                    android:id="@+id/linearLayout5"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/shape_details"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/add_tvTissue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/varela_round"
+                        android:text="Tissue"
+                        android:textColor="#1D1D1D"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/add_swTissue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout6"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/shape_details"
+                    android:orientation="vertical"
+                    app:layout_constraintEnd_toStartOf="@+id/linearLayout7"
+                    app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/add_tvSoap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/varela_round"
+                        android:text="Soap"
+                        android:textColor="#1D1D1D"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/add_swSoap"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout7"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:background="@drawable/shape_details"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/add_tvNapkin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/varela_round"
+                        android:text="Napkin"
+                        android:textAlignment="center"
+                        android:textColor="#1D1D1D"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/add_swNapkin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp" />
+
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btnAddRestroom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/varela_round"
+                android:text="Add Restroom" />
 
         </LinearLayout>
+    </ScrollView>
 
-        <LinearLayout
-            android:id="@+id/linearLayout7"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:background="@drawable/shape_details"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/add_tvNapkin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/varela_round"
-                android:text="Napkin"
-                android:textAlignment="center"
-                android:textColor="#1D1D1D"
-                android:textStyle="bold" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/add_swNapkin"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp" />
-
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <Button
-        android:id="@+id/btnAddRestroom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/varela_round"
-        android:text="Add Restroom"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_toiletries" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
